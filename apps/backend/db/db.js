@@ -28,4 +28,12 @@ const query = async (text, params) => {
   }
 };
 
+console.log("test");
+console.log("test");
+console.log("test");
+console.log("test");
+console.log("test");
+
+
+
 export { pool, query };
