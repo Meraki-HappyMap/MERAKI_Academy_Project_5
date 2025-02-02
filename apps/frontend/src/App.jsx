@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from "react-router";
+
+// Layouts
+import RootLayout from "./views/layouts/RootLayout";
+
+// Pages
+import {
+  HomePage,
+  ExplorePage,
+  ProfilePage,
+  LoginPage,
+  RegisterPage,
+} from "./views/pages";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      {/* public routes */}
+      <Route path="register" element={<RegisterPage />} />
+      <Route path="signin" element={<LoginPage />} />
+
+      {/* TODO: add a 404 page and 500 page with redirect button to home */}
+      <Route path="/oops" element={<div>Oops</div>} />
+      <Route path="/404" element={<div>404</div>} />
+
+      {/* private routes */}
+      <Route element={<RootLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="explore" element={<ExplorePage />} />
+        <Route path="profile" element={<ProfilePage />} />
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+export default App;
