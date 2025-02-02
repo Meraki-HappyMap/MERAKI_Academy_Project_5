@@ -23,10 +23,9 @@ const query = async (text, params) => {
     const result = await pool.query(text, params);
     return result;
   } catch (err) {
-    console.error("Database error: 510", err);
+    console.error("Database error: 510 ", err);
     throw err;
   }
 };
-console.log("test");
 
 export { pool, query };
