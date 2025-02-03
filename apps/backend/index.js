@@ -3,6 +3,7 @@ import cors from "cors";
 import passport from "passport";
 import session from "express-session";
 import router from "./routes/index.js";
+import placesRouter from "./routes/place.js";
 
 import { config } from "dotenv";
 import { query } from "./db/db.js";
@@ -29,6 +30,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("", router);
+app.use("/palces", placesRouter);
 
 // Basic health check route using async/await
 app.get("/api/health", async (req, res) => {
