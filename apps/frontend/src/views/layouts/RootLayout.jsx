@@ -1,5 +1,6 @@
 import { Outlet } from "react-router";
 import Navbar from "@/components/layout/Navbar";
+import Categories from "@/components/layout/Categories";
 
 // TODO:Implement Guard System and AuthGuard Provider
 
@@ -8,7 +9,9 @@ const RootLayout = () => {
     // <AuthGuard>
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      
+      <div className="pt-20">
+        <Categories />
+      </div>
 
       {/* Main Content */}
       <main className="flex-grow container mx-auto px-4 py-8">
