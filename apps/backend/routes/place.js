@@ -13,6 +13,8 @@ import { authenticateUser } from "../middleware/authN.js";
 
 const placesRouter = express.Router();
 
+placesRouter.use(authenticateUser);
+
 placesRouter.post("/", addPlace);
 placesRouter.get("/", getAllPlaces);
 placesRouter.get("/:id", getPlaceById);
