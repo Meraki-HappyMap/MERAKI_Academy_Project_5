@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { ThemeToggle } from "../theme/theme-toggle";
+import Logo from "../logo";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,7 +33,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold text-primary">HappyMap</span>
+            <Logo size={isScrolled ? "small" : "default"} />
           </Link>
 
           {/* Search Bar */}
