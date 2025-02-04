@@ -1,10 +1,5 @@
 import { Routes, Route } from "react-router";
 import { ThemeProvider } from "./components/theme/theme-provider";
-
-// Layouts
-import RootLayout from "./views/layouts/RootLayout";
-
-// Pages
 import {
   HomePage,
   ExplorePage,
@@ -12,6 +7,9 @@ import {
   LoginPage,
   RegisterPage,
 } from "./views/pages";
+
+import RootLayout from "./views/layouts/RootLayout";
+import PageTransition from "./components/PageTransition";
 
 function App() {
   return (
@@ -26,10 +24,13 @@ function App() {
         <Route path="/404" element={<div>404</div>} />
 
         {/* private routes */}
-        <Route element={<RootLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="explore" element={<ExplorePage />} />
-          <Route path="profile" element={<ProfilePage />} />
+        <Route element={<PageTransition />}>
+          <Route element={<RootLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="explore" element={<ExplorePage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="category/gaming" element={<HomePage />} />
+          </Route>
         </Route>
       </Routes>
     </ThemeProvider>
