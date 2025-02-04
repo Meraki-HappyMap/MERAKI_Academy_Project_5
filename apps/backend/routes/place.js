@@ -18,9 +18,9 @@ placesRouter.use(authenticateUser);
 placesRouter.post("/", addPlace);
 placesRouter.get("/", getAllPlaces);
 placesRouter.get("/:id", getPlaceById);
-placesRouter.get("/userName/:id", getPlaceByUser);
+placesRouter.get("/user/:id", getPlaceByUser);
 placesRouter.put("/:id", updatePlaceById);
 placesRouter.delete("/:id", deletePlaceById);
-placesRouter.delete("/userName/:id", deletePlaceByUser);
+placesRouter.delete("/user/:id", deletePlaceByUser);
 
 export default placesRouter;

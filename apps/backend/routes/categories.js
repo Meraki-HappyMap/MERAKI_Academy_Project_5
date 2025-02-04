@@ -6,19 +6,19 @@ import {
   getPlacesByCategoryId,
   updateCategory,
   deleteCategoryById,
-} from "../controllers/categories";
+} from "../controllers/categories.js";
 
 import { authenticateUser } from "../middleware/authN.js";
 
 const categoriesRouter = express.Router();
 
-categoriesRouter.use(authenticateUser);
+// categoriesRouter.use(authenticateUser);
 
 categoriesRouter.post("/", addCategory);
 categoriesRouter.get("/", getAllCategory);
 categoriesRouter.get("/:id", getCategoryById);
 categoriesRouter.post("/places/:id", getPlacesByCategoryId);
-categoriesRouter.put("/", updateCategory);
-categoriesRouter.delete("/", deleteCategoryById);
+categoriesRouter.put("/:id", updateCategory);
+categoriesRouter.delete("/:id", deleteCategoryById);
 
-export default categoriesRouter
+export default categoriesRouter;

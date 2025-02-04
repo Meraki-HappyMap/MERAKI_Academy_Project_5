@@ -21,7 +21,7 @@ const addCategory = async (req, res) => {
 };
 
 const getAllCategory = async (req, res) => {
-  const queryText = `SELECT * FROM categories AND is_deleted = 0;`;
+  const queryText = `SELECT * FROM categories WHERE "is_deleted "=0;`;
 
   try {
     const result = await query(queryText);
@@ -119,7 +119,7 @@ const updateCategory = async (req, res) => {
 
 const deleteCategoryById = async (req, res) => {
   const id = req.params.id;
-  const queryText = `UPDATE categories SET is_deleted=1 WHERE id=$1;`;
+  const queryText = `UPDATE categories SET "is_deleted "=1 WHERE id=$1;`;
   try {
     const result = await query(queryText, [id]);
 
