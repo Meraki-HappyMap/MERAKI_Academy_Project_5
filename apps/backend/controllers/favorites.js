@@ -1,5 +1,10 @@
 import { query } from "../db/db.js";
 
+// TODO: use req.user to get the user info
+// TODO: add enough conditions before sending a response
+
+// TODO: refactor addToFavorites and removeFromFavorites into one single function
+
 const addToFavorites = async (req, res) => {
   const { user_id, place_id } = req.body;
 
@@ -97,7 +102,7 @@ const isPlaceFavorite = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      isFavorite: result.rows.length > 0,
+      data: result.rows.length > 0,
     });
   } catch (err) {
     res.status(500).json({
