@@ -1,19 +1,21 @@
 import { query } from "../db/db.js";
 
+// TODO: use user id instead of commenter_id from req.user
+
 const addReview = async (req, res) => {
   const { commenter_id, place_id, comment, rate } = req.body;
 
   if (!comment && (rate === undefined || rate === null)) {
     return res.status(400).json({
       success: false,
-      message: "You must provide either a comment or a rating.",
+      message: "You must provide comment and rating.",
     });
   }
 
   if (rate !== undefined && rate !== null && (rate < 1 || rate > 5)) {
     return res.status(400).json({
       success: false,
-      message: "The rating must be between 1 and 5.",
+      message: "Invalid rating.",
     });
   }
 
@@ -136,7 +138,7 @@ const deleteReview = async (req, res) => {
 
     const result = await query(queryText, [id]);
 
-    if (result.rowCount === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).json({
         success: false,
         message: "Review not found or already deleted.",
