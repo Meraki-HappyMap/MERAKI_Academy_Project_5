@@ -14,11 +14,14 @@ const categoriesRouter = express.Router();
 
 // categoriesRouter.use(authenticateUser);
 
-categoriesRouter.post("/", addCategory);
 categoriesRouter.get("/", getAllCategory);
 categoriesRouter.get("/:id", getCategoryById);
+
+categoriesRouter.post("/", addCategory);
 categoriesRouter.post("/places/:id", getPlacesByCategoryId);
+
 categoriesRouter.put("/:id", updateCategory);
+
 categoriesRouter.delete("/:id", deleteCategoryById);
 
 export default categoriesRouter;

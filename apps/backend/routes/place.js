@@ -15,11 +15,14 @@ const placesRouter = express.Router();
 
 placesRouter.use(authenticateUser);
 
-placesRouter.post("/", addPlace);
 placesRouter.get("/", getAllPlaces);
 placesRouter.get("/:id", getPlaceById);
 placesRouter.get("/user/:id", getPlaceByUser);
+
+placesRouter.post("/", addPlace);
+
 placesRouter.put("/:id", updatePlaceById);
+
 placesRouter.delete("/:id", deletePlaceById);
 placesRouter.delete("/user/:id", deletePlaceByUser);
 

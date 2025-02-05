@@ -1,5 +1,9 @@
 import { query } from "../db/db.js";
 
+// TODO: add enough conditions before sending a response
+// TODO: where we have data return it in the response with "data" key (for example .json({data: result.rows}) )
+
+
 const addCategory = async (req, res) => {
   const { name } = req.body;
   const queryText = `INSERT INTO categories (name) VALUES ($1) RETURNING *`;

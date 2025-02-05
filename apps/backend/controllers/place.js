@@ -1,5 +1,9 @@
 import { query } from "../db/db.js";
 
+// TODO: use req.user to get the user info
+// TODO: where we have data return it in the response with "data" key (for example .json({data: result.rows}) )
+
+
 const addPlace = async (req, res) => {
   const { name, description, user_id, category_id, location } = req.body;
   const queryText = `INSERT INTO places (name,description,user_id,category_id,location) VALUES ($1,$2,$3,$4,$5) RETURNING *`;
@@ -98,6 +102,8 @@ const getPlaceByUser = async (req, res) => {
 const getPlaceById = async (req, res) => {
   const id = req.params.id;
 
+  // TODO: refactor images and videos
+
   const queryText = `
     SELECT 
       places.id,
@@ -193,6 +199,7 @@ const updatePlaceById = async (req, res) => {
       });
     }
 
+    // TODO: refactor 
     if (images && images.length > 0) {
       await query(`DELETE FROM place_images WHERE place_id = $1`, [placeId]);
       for (const img of images) {
@@ -203,6 +210,7 @@ const updatePlaceById = async (req, res) => {
       }
     }
 
+    // TODO: refactor
     if (videos && videos.length > 0) {
       await query(`DELETE FROM place_videos WHERE place_id = $1`, [placeId]);
       for (const vid of videos) {
