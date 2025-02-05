@@ -3,9 +3,15 @@ import { query } from "../db/db.js";
 // TODO: add enough conditions before sending a response
 // TODO: where we have data return it in the response with "data" key (for example .json({data: result.rows}) )
 
-
 const addCategory = async (req, res) => {
   const { name } = req.body;
+
+  if (!name) {
+    return res.status(400).json({
+      success: false,
+      message: "Category name is required",
+    });
+  }
   const queryText = `INSERT INTO categories (name) VALUES ($1) RETURNING *`;
   try {
     const result = await query(queryText, [name]);
@@ -13,7 +19,7 @@ const addCategory = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Category added successfully",
-      result: result.rows[0],
+      data: result.rows[0],
     });
   } catch (err) {
     res.status(500).json({
@@ -29,11 +35,19 @@ const getAllCategory = async (req, res) => {
 
   try {
     const result = await query(queryText);
-    res.status(200).json({
-      success: true,
-      message: "Retrieved all categories successfully",
-      categories: result.rows,
-    });
+
+    if (result.rows.length !== 0) {
+      res.status(200).json({
+        success: true,
+        message: "Retrieved all categories successfully",
+        data: result.rows,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "There are no categories",
+      });
+    }
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -54,7 +68,7 @@ const getCategoryById = async (req, res) => {
       res.status(200).json({
         success: true,
         message: `Category with id: ${id}`,
-        result: result.rows[0],
+        data: result.rows[0],
       });
     } else {
       res.status(404).json({
@@ -102,22 +116,41 @@ const getPlacesByCategoryId = async (req, res) => {
 const updateCategory = async (req, res) => {
   const { name } = req.body;
   const id = req.params.id;
-  const queryText = `UPDATE categories SET name = $1 WHERE id = $2 RETURNING *;`;
 
+  if (!name) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Category name are required" });
+  }
+
+  const checkQuery = `SELECT name FROM categories WHERE id = $1;`;
   try {
+    const checkResult = await query(checkQuery, [id]);
+    if (checkResult.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: `No category found with id: ${id}` });
+    }
+
+    if (checkResult.rows[0].name === name) {
+      return res.status(400).json({
+        success: false,
+        message: "New category name must be different from the current name",
+      });
+    }
+
+    const queryText = `UPDATE categories SET name = $1 WHERE id = $2 RETURNING *;`;
     const result = await query(queryText, [name, id]);
 
     res.status(200).json({
       success: true,
       message: "Category updated successfully",
-      result: result.rows[0],
+      data: result.rows[0],
     });
   } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-      error: err.message,
-    });
+    res
+      .status(500)
+      .json({ success: false, message: "Server error", error: err.message });
   }
 };
 
@@ -127,10 +160,17 @@ const deleteCategoryById = async (req, res) => {
   try {
     const result = await query(queryText, [id]);
 
-    res.status(200).json({
-      success: true,
-      message: "Category deleted successfully",
-    });
+    if (result.rows.length !== 0) {
+      res.status(200).json({
+        success: true,
+        message: "Category deleted successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: true,
+        message: "Category not found",
+      });
+    }
   } catch (err) {
     res.status(500).json({
       success: false,
