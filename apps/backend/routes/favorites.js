@@ -12,9 +12,11 @@ const favoriteRouter = express.Router();
 
 // favoriteRouter.use(authenticateUser);
 
-favoriteRouter.post("/add", addToFavorites);
-favoriteRouter.put("/remove", removeFromFavorites);
 favoriteRouter.get("/user/:user_id", getUserFavorites);
 favoriteRouter.get("/check/:user_id/:palce_id", isPlaceFavorite);
+
+favoriteRouter.post("/add", addToFavorites);
+
+favoriteRouter.put("/remove", removeFromFavorites);
 
 export default favoriteRouter;

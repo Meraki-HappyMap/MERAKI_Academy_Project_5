@@ -1,5 +1,7 @@
 import { query } from "../db/db.js";
 
+// TODO: use req.user to get the user info
+// TODO: add enough conditions before sending a response
 const addBooking = async (req, res) => {
   const { user_id, place_id, start_time, end_time } = req.body;
 
