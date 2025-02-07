@@ -22,7 +22,7 @@ export async function getCurrentUser(token) {
 export async function updateUserRole(token, role) {
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/auth/role`,
+      `${import.meta.env.VITE_BACKEND_URL}/users/role`,
       {
         method: "PUT",
         headers: {

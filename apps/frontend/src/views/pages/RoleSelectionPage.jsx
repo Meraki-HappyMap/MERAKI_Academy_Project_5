@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,29 +32,39 @@ import {
 import { cn } from "@/lib/utils";
 
 const RoleSelectionPage = () => {
-  const [selectedRole, setSelectedRole] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toast } = useToast();
-  const { token } = useSelector((state) => state.auth);
+  const { token, user } = useSelector((state) => state.auth);
 
-  const handleConfirm = async () => {
+  useEffect(() => {
+    if (user && user.role !== "unassigned") {
+      navigate("/", { replace: true });
+    }
+  }, [user, navigate]);
+
+  const handleConfirm = async (role) => {
     try {
       setIsLoading(true);
-      await updateUserRoleAPI(token, selectedRole);
-      dispatch(updateUserRole(selectedRole));
+      await updateUserRoleAPI(token, role);
+
+      dispatch(updateUserRole(role));
       dispatch(setFirstTimeLogin(false));
+
       toast({
         title: "Role selected successfully!",
-        description: `You are now a ${selectedRole === "owner" ? "Property Owner" : "Property Explorer"}`,
+        description: `${role === "owner" ? "Ok! Time to list your properties" : "Ok! Time to look for fun places to go"}`,
       });
-      navigate("/");
-    } catch {
+
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Failed to update role:", error);
       toast({
         title: "Error",
-        description: "Failed to update role. Please try again.",
+        description:
+          error.message || "Failed to update role. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -171,7 +181,6 @@ const RoleSelectionPage = () => {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
                 <MorphingDialog
-                  key={role}
                   transition={{ duration: 0.3 }}
                   onOpenChange={(open) => setOpenDialog(open ? role : null)}
                 >
@@ -313,10 +322,7 @@ const RoleSelectionPage = () => {
                               </Button>
                             </MorphingDialogClose>
                             <Button
-                              onClick={() => {
-                                setSelectedRole(role);
-                                handleConfirm();
-                              }}
+                              onClick={() => handleConfirm(role)}
                               disabled={isLoading}
                               className={cn(
                                 "relative overflow-hidden transition-all",

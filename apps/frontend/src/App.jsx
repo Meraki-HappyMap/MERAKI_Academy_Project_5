@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router";
 import { ThemeProvider } from "./components/theme/theme-provider";
 import { AuthGuard } from "./lib/AuthGuard";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import {
   HomePage,
@@ -15,41 +15,51 @@ import RootLayout from "./views/layouts/RootLayout";
 import PageTransition from "./components/PageTransition";
 
 function App() {
-  // const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
   return (
     <ThemeProvider defaultTheme="system" storageKey="happymap-theme">
       <Routes>
-        {/* public routes */}
-        <Route path="signin" element={<SigninPage />} />
+        {/* Public routes */}
+        <Route
+          path="signin"
+          element={
+            isAuthenticated ? <Navigate to="/" replace /> : <SigninPage />
+          }
+        />
 
         {/* TODO: add a 404 page and 500 page with redirect button to home */}
         <Route path="/oops" element={<div>Oops</div>} />
         <Route path="/404" element={<div>404</div>} />
 
-        {/* private routes */}
         <Route
           path="role-selection"
           element={
             <AuthGuard>
-              <RoleSelectionPage />
+              {user?.role !== "unassigned" ? (
+                <Navigate to="/" replace />
+              ) : (
+                <RoleSelectionPage />
+              )}
             </AuthGuard>
           }
         />
 
+        {/* Protected routes */}
         <Route element={<PageTransition />}>
           <Route element={<RootLayout />}>
-            {/* <Route
-              index
-              element={
-                isAuthenticated && user?.role === "unassigned" ? (
-                  <Navigate to="/role-selection" replace />
-                ) : (
-                  <HomePage />
-                )
-              }
-            /> */}
-            <Route index element={<Navigate to="/role-selection" replace />} />
+            {
+              <Route
+                index
+                element={
+                  isAuthenticated && user?.role === "unassigned" ? (
+                    <Navigate to="/role-selection" replace />
+                  ) : (
+                    <HomePage />
+                  )
+                }
+              />
+            }
             <Route path="explore" element={<ExplorePage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="category/gaming" element={<HomePage />} />
