@@ -52,6 +52,11 @@ const authSlice = createSlice({
     setFirstTimeLogin: (state, action) => {
       state.firstTimeLogin = action.payload;
     },
+    updateUserRole: (state, action) => {
+      if (state.user) {
+        state.user.role = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -85,6 +90,7 @@ export const {
   clearError,
   setLoading,
   setFirstTimeLogin,
+  updateUserRole,
 } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,11 +1,22 @@
-import { Routes, Route } from "react-router";
+import { Routes, Route, Navigate } from "react-router";
 import { ThemeProvider } from "./components/theme/theme-provider";
-import { HomePage, ExplorePage, ProfilePage, SigninPage } from "./views/pages";
+import { AuthGuard } from "./lib/AuthGuard";
+// import { useSelector } from "react-redux";
+
+import {
+  HomePage,
+  ExplorePage,
+  ProfilePage,
+  SigninPage,
+  RoleSelectionPage,
+} from "./views/pages";
 
 import RootLayout from "./views/layouts/RootLayout";
 import PageTransition from "./components/PageTransition";
 
 function App() {
+  // const { isAuthenticated, user } = useSelector((state) => state.auth);
+
   return (
     <ThemeProvider defaultTheme="system" storageKey="happymap-theme">
       <Routes>
@@ -17,9 +28,28 @@ function App() {
         <Route path="/404" element={<div>404</div>} />
 
         {/* private routes */}
+        <Route
+          path="role-selection"
+          element={
+            <AuthGuard>
+              <RoleSelectionPage />
+            </AuthGuard>
+          }
+        />
+
         <Route element={<PageTransition />}>
           <Route element={<RootLayout />}>
-            <Route index element={<HomePage />} />
+            {/* <Route
+              index
+              element={
+                isAuthenticated && user?.role === "unassigned" ? (
+                  <Navigate to="/role-selection" replace />
+                ) : (
+                  <HomePage />
+                )
+              }
+            /> */}
+            <Route index element={<Navigate to="/role-selection" replace />} />
             <Route path="explore" element={<ExplorePage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="category/gaming" element={<HomePage />} />
