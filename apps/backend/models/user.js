@@ -14,7 +14,7 @@ const createUsersTable = async () => {
       full_name VARCHAR(255) NOT NULL,
       phone_number VARCHAR(20),
       avatar_url VARCHAR(1000),
-      role VARCHAR(20) DEFAULT 'user',
+      role VARCHAR(20) DEFAULT 'unassigned',
       is_verified BOOLEAN DEFAULT true,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -116,6 +116,23 @@ export const User = {
     `;
 
     const result = await query(queryText, values);
+    return result.rows[0];
+  },
+
+  async updateRole(id, role) {
+    const allowedRoles = ["owner", "user"];
+    if (!allowedRoles.includes(role)) {
+      throw new Error("Invalid role");
+    }
+
+    const queryText = `
+      UPDATE users 
+      SET role = $2, updated_at = CURRENT_TIMESTAMP 
+      WHERE id = $1 
+      RETURNING *
+    `;
+
+    const result = await query(queryText, [id, role]);
     return result.rows[0];
   },
 };

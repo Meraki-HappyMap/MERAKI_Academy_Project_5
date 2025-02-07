@@ -10,7 +10,6 @@ config();
 
 const authRoutes = express.Router();
 
-
 passport.use(
   new GoogleStrategy(
     {
@@ -39,7 +38,7 @@ passport.use(
             fullName: profile.displayName,
             username: username,
             avatarUrl: profile.photos?.[0]?.value,
-            role: "user",
+            role: "unassigned",
           });
         }
 
