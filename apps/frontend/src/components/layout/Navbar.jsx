@@ -31,7 +31,6 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          {/* Logo */}
           <Link to="/" className="flex items-center">
             <Logo size={isScrolled ? "small" : "default"} />
           </Link>
@@ -73,17 +72,21 @@ const Navbar = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem>
-                  <Link to="/login">Login</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/signup">Sign up</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/profile">Profile</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/bookings">My Bookings</Link>
+                <Link to="/signin">
+                  <DropdownMenuItem className="cursor-pointer">
+                    Sign In
+                  </DropdownMenuItem>
+                </Link>
+
+                {/* TODO: alter two menu items to show only if user is logged in */}
+                <Link to="/bookings">
+                  <DropdownMenuItem className="cursor-pointer">
+                    My Bookings (todo)
+                  </DropdownMenuItem>
+                </Link>
+                {/* TODO: Add a logout button */}
+                <DropdownMenuItem className="cursor-pointer" onClick={() => {}}>
+                  Logout (todo)
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
