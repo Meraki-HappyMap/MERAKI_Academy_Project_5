@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "@/lib/redux/slices/authSlice";
 import { Search, MapPin, Menu, User } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -12,7 +14,10 @@ import { ThemeToggle } from "../theme/theme-toggle";
 import Logo from "../logo";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   // Add scroll event listener
   useState(() => {
@@ -72,22 +77,32 @@ const Navbar = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                <Link to="/signin">
-                  <DropdownMenuItem className="cursor-pointer">
-                    Sign In
-                  </DropdownMenuItem>
-                </Link>
-
-                {/* TODO: alter two menu items to show only if user is logged in */}
-                <Link to="/bookings">
-                  <DropdownMenuItem className="cursor-pointer">
-                    My Bookings (todo)
-                  </DropdownMenuItem>
-                </Link>
-                {/* TODO: Add a logout button */}
-                <DropdownMenuItem className="cursor-pointer" onClick={() => {}}>
-                  Logout (todo)
-                </DropdownMenuItem>
+                {isAuthenticated ? (
+                  <>
+                    <Link to="/bookings">
+                      <DropdownMenuItem className="cursor-pointer">
+                        My Bookings (todo)
+                      </DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      onClick={() => {
+                        dispatch(logout());
+                        navigate("/signin");
+                      }}
+                    >
+                      Sign Out
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/signin">
+                      <DropdownMenuItem className="cursor-pointer">
+                        Sign In
+                      </DropdownMenuItem>
+                    </Link>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

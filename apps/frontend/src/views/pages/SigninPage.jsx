@@ -68,8 +68,8 @@ const SigninPage = () => {
     if (error) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error,
+        title: "Please try again.",
+        description: "Failed to sign in or session expired.",
       });
       dispatch(clearError());
     }
@@ -78,7 +78,7 @@ const SigninPage = () => {
   return (
     <div className="h-screen w-screen">
       <div className="z-10 flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-        <div className="flex w-full max-w-2xl flex-col gap-6">
+        <div className="flex w-full max-w-2xl flex-col items-center gap-6">
           <Logo />
           <LoginForm />
         </div>
