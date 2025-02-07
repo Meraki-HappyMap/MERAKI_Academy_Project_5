@@ -1,4 +1,4 @@
-import Logo from "@/components/logo.jsx";
+import Logo from "@/components/signin-page/Logo.jsx";
 import { motion } from "framer-motion";
 
 import { useEffect } from "react";
