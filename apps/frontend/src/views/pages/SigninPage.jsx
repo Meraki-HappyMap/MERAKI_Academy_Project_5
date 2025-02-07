@@ -1,4 +1,5 @@
 import Logo from "@/components/logo.jsx";
+import { motion } from "framer-motion";
 
 import { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router";
@@ -10,7 +11,7 @@ import {
 } from "@/lib/redux/slices/authSlice";
 import { LoginForm } from "@/components/signin-page/LoginForm";
 import { useToast } from "@/hooks/use-toast";
-// import { AuroraBackground } from "@/components/ui/aurora-background";
+import { Spotlight } from "@/components/ui/Spotlight";
 
 const SigninPage = () => {
   const { toast } = useToast();
@@ -76,12 +77,42 @@ const SigninPage = () => {
   }, [error, dispatch, toast]);
 
   return (
-    <div className="h-screen w-screen">
-      <div className="z-10 flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-        <div className="flex w-full max-w-2xl flex-col items-center gap-6">
-          <Logo />
-          <LoginForm />
+    <div className="fixed inset-0 overflow-hidden bg-gradient-to-b from-slate-950 to-black">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,65,105,0.05),transparent)] animate-pulse-slow" />
+
+      <div className="relative w-full h-full flex flex-col items-center">
+        <Spotlight
+          fill="#f43f5e"
+          className="-top-16 left-0 md:left-40 md:-top-40 lg:left-[15%] lg:-top-52"
+        />
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="w-full flex justify-center mt-20"
+        >
+          <Logo className="transform-gpu scale-125 hover:scale-110 transition-transform duration-300" />
+        </motion.div>
+
+        <div className="mt-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="w-full max-w-md mx-auto px-4 pt-4"
+          >
+            <LoginForm className="w-full backdrop-blur-3xl" />
+          </motion.div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, delay: 0.5 }}
+          className="absolute bottom-6 text-center text-sm text-gray-400"
+        >
+          <p>Experience the joy of discovering new places</p>
+        </motion.div>
       </div>
     </div>
   );
