@@ -1,12 +1,6 @@
 import { Routes, Route } from "react-router";
 import { ThemeProvider } from "./components/theme/theme-provider";
-import {
-  HomePage,
-  ExplorePage,
-  ProfilePage,
-  LoginPage,
-  RegisterPage,
-} from "./views/pages";
+import { HomePage, ExplorePage, ProfilePage, SigninPage } from "./views/pages";
 
 import RootLayout from "./views/layouts/RootLayout";
 import PageTransition from "./components/PageTransition";
@@ -16,8 +10,7 @@ function App() {
     <ThemeProvider defaultTheme="system" storageKey="happymap-theme">
       <Routes>
         {/* public routes */}
-        <Route path="register" element={<RegisterPage />} />
-        <Route path="signin" element={<LoginPage />} />
+        <Route path="signin" element={<SigninPage />} />
 
         {/* TODO: add a 404 page and 500 page with redirect button to home */}
         <Route path="/oops" element={<div>Oops</div>} />
