@@ -48,7 +48,6 @@ const toggleFavorite = async (req, res) => {
       });
     }
   } catch (err) {
-    console.error("Error while toggling favorite:", err);
     res.status(500).json({
       success: false,
       message: "Server error",

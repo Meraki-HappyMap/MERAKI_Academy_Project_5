@@ -128,7 +128,7 @@ const getPlaceByUser = async (req, res) => {
 
 const getPlaceById = async (req, res) => {
   const id = req.params.id;
-
+// TODO: refactor images and videos
   const queryText = `
     SELECT 
       places.id,
@@ -165,7 +165,6 @@ const getPlaceById = async (req, res) => {
       });
     }
   } catch (err) {
-    console.error("Database error:", err);
     res.status(500).json({
       success: false,
       message: "Server error",
@@ -225,6 +224,7 @@ const updatePlaceById = async (req, res) => {
       });
     }
 
+    // TODO: refactor images and videos
     if (images && images.length > 0) {
       await query(`DELETE FROM place_images WHERE place_id = $1`, [placeId]);
       for (const img of images) {
@@ -235,6 +235,7 @@ const updatePlaceById = async (req, res) => {
       }
     }
 
+    // TODO: refactor images and videos
     if (videos && videos.length > 0) {
       await query(`DELETE FROM place_videos WHERE place_id = $1`, [placeId]);
       for (const vid of videos) {
@@ -348,7 +349,6 @@ const deletePlaceByUser = async (req, res) => {
     });
   }
 };
-
 
 export {
   addPlace,

@@ -2,7 +2,7 @@ import { query } from "../db/db.js";
 
 const addReview = async (req, res) => {
   const { comment, rate } = req.body;
-  const place_id = req.params.place_id;
+  const place_id = req.params.id;
   const commenter_id = req.user.id;
 
   if (!comment && (rate === undefined || rate === null)) {
@@ -156,7 +156,6 @@ const updateReview = async (req, res) => {
       data: result.rows[0],
     });
   } catch (err) {
-    console.error("Database error:", err);
     res.status(500).json({
       success: false,
       message: "server error",
@@ -203,10 +202,8 @@ const deleteReview = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Review deleted successfully.",
-      data: result.rows[0],
     });
   } catch (err) {
-    console.error("Database error:", err);
     res.status(500).json({
       success: false,
       message: "server error",
