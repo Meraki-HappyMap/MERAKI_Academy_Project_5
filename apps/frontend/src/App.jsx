@@ -9,6 +9,9 @@ import {
   ProfilePage,
   SigninPage,
   RoleSelectionPage,
+  NotFoundPage,
+  OopsPage,
+  PlaceDetailedPage,
 } from "./views/pages";
 
 import RootLayout from "./views/layouts/RootLayout";
@@ -29,8 +32,8 @@ function App() {
         />
 
         {/* TODO: add a 404 page and 500 page with redirect button to home */}
-        <Route path="/oops" element={<div>Oops</div>} />
-        <Route path="/404" element={<div>404</div>} />
+        <Route path="/oops" element={<OopsPage />} />
+        <Route path="/404" element={<NotFoundPage />} />
 
         <Route
           path="role-selection"
@@ -62,7 +65,8 @@ function App() {
             }
             <Route path="explore" element={<ExplorePage />} />
             <Route path="profile" element={<ProfilePage />} />
-            <Route path="category/gaming" element={<HomePage />} />
+            <Route path="place/:id" element={<PlaceDetailedPage />} />
+            <Route path="category/gaming" element={<PlaceDetailedPage />} />
           </Route>
         </Route>
       </Routes>
