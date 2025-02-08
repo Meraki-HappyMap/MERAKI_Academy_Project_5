@@ -83,22 +83,22 @@ const getCategoryById = async (req, res) => {
 };
 
 const getPlacesByCategoryId = async (req, res) => {
-  const categoryId = req.params.id;
+  const { category_Id } = req.params;
   const queryText = `SELECT * FROM places WHERE category_id = $1 AND is_deleted = 0;`;
 
   try {
-    const result = await query(queryText, [categoryId]);
+    const result = await query(queryText, [category_Id]);
 
     if (result.rows.length !== 0) {
       res.status(200).json({
         success: true,
-        message: `Places found for category with id: ${categoryId}`,
+        message: `Places found for category with id: ${category_Id}`,
         data: result.rows,
       });
     } else {
       res.status(404).json({
         success: false,
-        message: `No places found for category with id: ${categoryId}`,
+        message: `No places found for category with id: ${category_Id}`,
       });
     }
   } catch (err) {
