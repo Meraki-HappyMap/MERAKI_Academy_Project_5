@@ -1,20 +1,12 @@
 import express from "express";
 import authRoutes from "./auth.js";
-import userRoutes from "./user.js";
-import placeRoutes from "./place.js";
-import bookingRoutes from "./booking.js";
-import reviewsRoutes from "./reviews.js";
-import favoritesRoutes from "./favorites.js";
-import categoriesRoutes from "./categories.js";
+import placesRouter from "./place.js";
+import categoriesRouter from "./categories.js"
 
 const router = express.Router();
 
 router.use("/auth", authRoutes);
-router.use("/users", userRoutes);
-router.use("/places", placeRoutes);
-router.use("/bookings", bookingRoutes);
-router.use("/reviews", reviewsRoutes);
-router.use("/favorites", favoritesRoutes);
-router.use("/categories", categoriesRoutes);
+router.use("/places", placesRouter);
+router.use("/categories", categoriesRouter);
 
 export default router;

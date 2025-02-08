@@ -6,12 +6,10 @@ meta {
 
 get {
   url: http://localhost:5000/auth/me
-  body: none
-  auth: none
 }
 
 headers {
-  authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzYW1pLm1hbEBvdXRsb29rLmNvbSIsInVzZXJuYW1lIjoic2FtaS5tYWwiLCJyb2xlIjoidXNlciIsImlhdCI6MTczODk0NDc0MCwiZXhwIjoxNzM5MDMxMTQwfQ.50Xuk_I1fI_zRbLPA3maeXbcf5RId3A7Vxi1Y4yhuhU
+  authorization: Bearer jwt_token_here
 }
 
 tests {

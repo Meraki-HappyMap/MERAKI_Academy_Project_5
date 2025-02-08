@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
-import { logout } from "@/lib/redux/slices/authSlice";
+import { Link } from "react-router";
 import { Search, MapPin, Menu, User } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -14,10 +12,7 @@ import { ThemeToggle } from "../theme/theme-toggle";
 import Logo from "../logo";
 
 const Navbar = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
-  const { isAuthenticated } = useSelector((state) => state.auth);
 
   // Add scroll event listener
   useState(() => {
@@ -36,6 +31,7 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
+          {/* Logo */}
           <Link to="/" className="flex items-center">
             <Logo size={isScrolled ? "small" : "default"} />
           </Link>
@@ -77,32 +73,18 @@ const Navbar = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                {isAuthenticated ? (
-                  <>
-                    <Link to="/bookings">
-                      <DropdownMenuItem className="cursor-pointer">
-                        My Bookings (todo)
-                      </DropdownMenuItem>
-                    </Link>
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={() => {
-                        dispatch(logout());
-                        navigate("/signin");
-                      }}
-                    >
-                      Sign Out
-                    </DropdownMenuItem>
-                  </>
-                ) : (
-                  <>
-                    <Link to="/signin">
-                      <DropdownMenuItem className="cursor-pointer">
-                        Sign In
-                      </DropdownMenuItem>
-                    </Link>
-                  </>
-                )}
+                <DropdownMenuItem>
+                  <Link to="/login">Login</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/signup">Sign up</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/profile">Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/bookings">My Bookings</Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
