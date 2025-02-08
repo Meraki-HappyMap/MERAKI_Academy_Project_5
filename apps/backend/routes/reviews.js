@@ -10,9 +10,9 @@ import { authenticateUser } from "../middleware/authN.js";
 
 const reviewsRouter = express.Router();
 
-// placesRouter.use(authenticateUser);
+reviewsRouter.use(authenticateUser);
 
-reviewsRouter.get("/:place_id", getReviewsByPlace);
+reviewsRouter.get("/:id", getReviewsByPlace);
 
 reviewsRouter.post("/", addReview);
 

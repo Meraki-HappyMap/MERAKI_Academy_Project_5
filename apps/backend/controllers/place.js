@@ -1,61 +1,88 @@
 import { query } from "../db/db.js";
 
-// TODO: use req.user to get the user info
-// TODO: where we have data return it in the response with "data" key (for example .json({data: result.rows}) )
-
-
 const addPlace = async (req, res) => {
-  const { name, description, user_id, category_id, location } = req.body;
-  const queryText = `INSERT INTO places (name,description,user_id,category_id,location) VALUES ($1,$2,$3,$4,$5) RETURNING *`;
-  const values = [name, description, user_id, category_id, location];
-  try {
-    const result = await query(queryText, values);
+  const user_id = req.user.id;
+  const { name, description, category_id, location } = req.body;
 
-    res.status(201).json({
-      success: true,
-      message: "place added successfully",
-      result: result.rows[0],
-    });
-  } catch (err) {
-    res.status(500).json({
+  if (!name || !description || !category_id || !location) {
+    return res.status(400).json({
       success: false,
-      message: "Server error",
-      err: err,
+      message:
+        "All fields (name, description, category_id, location) are required.",
     });
   }
-};
-const getAllPlaces = async (req, res) => {
-  const queryText = `SELECT * FROM places WHERE places.is_deleted=0;`;
 
+  const userCheckQuery = `SELECT id FROM users WHERE id = $1`;
   try {
-    const result = await query(queryText);
-    res.status(200).json({
-      success: true,
-      message: "get all the places",
-      articles: result.rows,
-    });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-      Error: err,
-    });
-  }
-};
-const getPlaceByUser = async (req, res) => {
-  const user_id = req.params.id;
-
-  try {
-    const userCheckQuery = `SELECT id FROM users WHERE id = $1`;
     const userCheckResult = await query(userCheckQuery, [user_id]);
 
     if (userCheckResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        message: `User with ID ${user_id} not found`,
+        message: `User with ID ${user_id} not found.`,
       });
     }
 
+    const categoryCheckQuery = `SELECT id FROM categories WHERE id = $1`;
+    const categoryCheckResult = await query(categoryCheckQuery, [category_id]);
+
+    if (categoryCheckResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: `Category with ID ${category_id} not found.`,
+      });
+    }
+
+    const queryText = `INSERT INTO places (name, description, user_id, category_id, location) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+    const values = [name, description, user_id, category_id, location];
+    const result = await query(queryText, values);
+
+    res.status(201).json({
+      success: true,
+      message: "Place added successfully",
+      data: result.rows[0],
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
+  }
+};
+
+const getAllPlaces = async (req, res) => {
+  const queryText = `SELECT * FROM places WHERE places.is_deleted = 0;`;
+
+  try {
+    const result = await query(queryText);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No places found.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Fetched all places successfully.",
+      data: result.rows,
+    });
+  } catch (err) {
+    console.error("Error fetching places:", err);
+    res.status(500).json({
+      success: false,
+      message: "Server error occurred while fetching places.",
+      error: err.message,
+    });
+  }
+};
+
+const getPlaceByUser = async (req, res) => {
+  const user_id = req.user.id;
+
+  try {
     const queryText = `
       SELECT 
         places.id,
@@ -87,7 +114,7 @@ const getPlaceByUser = async (req, res) => {
     res.status(200).json({
       success: true,
       message: `All places for the owner: ${user_id}`,
-      places: result.rows,
+      data: result.rows,
     });
   } catch (err) {
     console.error("Database error:", err);
@@ -101,9 +128,7 @@ const getPlaceByUser = async (req, res) => {
 
 const getPlaceById = async (req, res) => {
   const id = req.params.id;
-
-  // TODO: refactor images and videos
-
+// TODO: refactor images and videos
   const queryText = `
     SELECT 
       places.id,
@@ -131,7 +156,7 @@ const getPlaceById = async (req, res) => {
       res.status(200).json({
         success: true,
         message: `The place with id: ${id}`,
-        result: result.rows[0],
+        data: result.rows[0],
       });
     } else {
       res.status(404).json({
@@ -149,9 +174,9 @@ const getPlaceById = async (req, res) => {
 };
 
 const updatePlaceById = async (req, res) => {
+  const user_id = req.user.id;
   const placeId = req.params.id;
-  const { name, description, user_id, category_id, location, images, videos } =
-    req.body;
+  const { name, description, category_id, location, images, videos } = req.body;
 
   try {
     const placeCheckQuery = `SELECT user_id FROM places WHERE id = $1 AND is_deleted = 0`;
@@ -199,7 +224,7 @@ const updatePlaceById = async (req, res) => {
       });
     }
 
-    // TODO: refactor 
+    // TODO: refactor images and videos
     if (images && images.length > 0) {
       await query(`DELETE FROM place_images WHERE place_id = $1`, [placeId]);
       for (const img of images) {
@@ -210,7 +235,7 @@ const updatePlaceById = async (req, res) => {
       }
     }
 
-    // TODO: refactor
+    // TODO: refactor images and videos
     if (videos && videos.length > 0) {
       await query(`DELETE FROM place_videos WHERE place_id = $1`, [placeId]);
       for (const vid of videos) {
@@ -224,7 +249,7 @@ const updatePlaceById = async (req, res) => {
     res.status(200).json({
       success: true,
       message: `Place with ID: ${placeId} updated successfully`,
-      updatedPlace: updateResult.rows[0],
+      data: updateResult.rows[0],
     });
   } catch (err) {
     console.error("Database error:", err);
@@ -237,31 +262,43 @@ const updatePlaceById = async (req, res) => {
 };
 
 const deletePlaceById = async (req, res) => {
-  const id = req.params.id;
-
-  if (!id || isNaN(id)) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid or missing place ID",
-    });
-  }
-
-  const queryText = `UPDATE places SET is_deleted = 1, updated_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING *;`;
+  const user_id = req.user.id;
+  const placeId = req.params.id;
 
   try {
-    const result = await query(queryText, [id]);
+    const placeCheckQuery = `SELECT user_id FROM places WHERE id = $1 AND is_deleted = 0`;
+    const placeCheckResult = await query(placeCheckQuery, [placeId]);
+
+    if (placeCheckResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: `No place found with ID: ${placeId}`,
+      });
+    }
+
+    const placeOwnerId = placeCheckResult.rows[0].user_id;
+
+    if (user_id !== placeOwnerId) {
+      return res.status(403).json({
+        success: false,
+        message: `You are not authorized to delete this place`,
+      });
+    }
+
+    const queryText = `UPDATE places SET is_deleted = 1, updated_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING *;`;
+    const result = await query(queryText, [placeId]);
 
     if (result.rowCount === 0) {
       return res.status(404).json({
         success: false,
-        message: `No place found with ID: ${id}`,
+        message: `No place found with ID: ${placeId}`,
       });
     }
 
     res.status(200).json({
       success: true,
-      message: `Place with ID: ${id} deleted successfully`,
-      deletedPlace: result.rows[0],
+      message: `Place with ID: ${placeId} deleted successfully`,
+      data: result.rows[0],
     });
   } catch (err) {
     console.error("Database error:", err);
@@ -274,31 +311,34 @@ const deletePlaceById = async (req, res) => {
 };
 
 const deletePlaceByUser = async (req, res) => {
+  const user_id = req.user.id;
   const id = req.params.id;
 
-  if (!id || isNaN(id)) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid or missing user ID",
-    });
-  }
-
-  const queryText = `UPDATE places SET is_deleted = 1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $1 RETURNING *;`;
-
   try {
-    const result = await query(queryText, [id]);
+    const placesCheckQuery = `SELECT id, user_id FROM places WHERE user_id = $1 AND is_deleted = 0`;
+    const placesCheckResult = await query(placesCheckQuery, [id]);
 
-    if (result.rowCount === 0) {
+    if (placesCheckResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
         message: `No places found for user with ID: ${id}`,
       });
     }
 
+    if (user_id !== id) {
+      return res.status(403).json({
+        success: false,
+        message: `You are not authorized to delete these places`,
+      });
+    }
+
+    const queryText = `UPDATE places SET is_deleted = 1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $1 RETURNING *;`;
+    const result = await query(queryText, [id]);
+
     res.status(200).json({
       success: true,
       message: `All places for user ID: ${id} deleted successfully`,
-      deletedPlaces: result.rows,
+      data: result.rows,
     });
   } catch (err) {
     console.error("Database error:", err);

@@ -1,7 +1,6 @@
 import express from "express";
 import {
-  addToFavorites,
-  removeFromFavorites,
+  toggleFavorite,
   getUserFavorites,
   isPlaceFavorite,
 } from "../controllers/favorites.js";
@@ -10,14 +9,11 @@ import { authenticateUser } from "../middleware/authN.js";
 
 const favoriteRouter = express.Router();
 
-// favoriteRouter.use(authenticateUser);
+favoriteRouter.use(authenticateUser);
 
-// TODO: refactor getUserFavorites and isPlaceFavorite into one single endpoint
-favoriteRouter.get("/user/:user_id", getUserFavorites);
+favoriteRouter.post("/toggleFavorite/:place_id", toggleFavorite);
+favoriteRouter.get("/user", getUserFavorites);
 favoriteRouter.get("/check/:user_id/:palce_id", isPlaceFavorite);
 
-favoriteRouter.post("/add", addToFavorites);
-
-favoriteRouter.put("/remove", removeFromFavorites);
 
 export default favoriteRouter;

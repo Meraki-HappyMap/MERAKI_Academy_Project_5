@@ -12,13 +12,13 @@ import { authenticateUser } from "../middleware/authN.js";
 
 const categoriesRouter = express.Router();
 
-// categoriesRouter.use(authenticateUser);
+categoriesRouter.use(authenticateUser);
 
 categoriesRouter.get("/", getAllCategory);
 categoriesRouter.get("/:id", getCategoryById);
 
 categoriesRouter.post("/", addCategory);
-categoriesRouter.post("/places/:id", getPlacesByCategoryId);
+categoriesRouter.get("/places/:category_Id", getPlacesByCategoryId);
 
 categoriesRouter.put("/:id", updateCategory);
 
