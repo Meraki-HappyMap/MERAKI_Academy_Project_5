@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, CardFooter } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Star } from "lucide-react";
 
 const reviews = {
@@ -63,14 +63,14 @@ function Reviews() {
                 </div>
               </div>
             </CardHeader>
-            <CardBody>
+            <CardContent>
               <div className="flex items-center text-yellow-500 mb-2">
                 {Array.from({ length: review.rate }).map((_, index) => (
                   <Star key={index} className="w-5 h-5" />
                 ))}
               </div>
               <p className="text-gray-700">{review.comment}</p>
-            </CardBody>
+            </CardContent>
             <CardFooter>
               <p className="text-gray-400 text-sm mt-2">{review.created_at}</p>
             </CardFooter>

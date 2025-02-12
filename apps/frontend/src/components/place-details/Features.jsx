@@ -34,7 +34,7 @@ function Features() {
   return (
     <Accordion type="single" collapsible className="w-full">
       {featuresPlace.map((features, index) => (
-        <div className="flex flex-row items-center gap-5 ">
+        <div key={index} className="flex flex-row items-center gap-5 ">
           <icons>{features.icons}</icons>
           <AccordionItem value={index + 1} className="w-full">
             <AccordionTrigger className="pl-4 bg-white">

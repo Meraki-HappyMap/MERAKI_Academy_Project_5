@@ -1,4 +1,3 @@
-import React from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 function ImagesAndVideo() {
@@ -25,8 +24,6 @@ function ImagesAndVideo() {
       videos: ["https://www.w3schools.com/html/mov_bbb.mp4"],
     },
   };
-
-
 
   const { images, videos } = place.data;
   const media = [...images, ...videos];
