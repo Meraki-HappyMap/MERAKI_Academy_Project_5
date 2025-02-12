@@ -2,7 +2,7 @@ import { query } from "../db/db.js";
 
 const addReview = async (req, res) => {
   const { comment, rate } = req.body;
-  const place_id = req.params.id;
+  const { place_id } = req.params;
   const commenter_id = req.user.id;
 
   if (!comment && (rate === undefined || rate === null)) {
