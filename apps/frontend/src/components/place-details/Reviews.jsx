@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardHeader, CardBody, CardFooter } from "@/components/ui/card";
 import { Star } from "lucide-react";
 

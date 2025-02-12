@@ -1,4 +1,3 @@
-import React from "react";
 import { Pizza, Phone } from "lucide-react";
 
 import {
