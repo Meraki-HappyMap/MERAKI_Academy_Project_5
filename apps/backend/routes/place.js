@@ -16,7 +16,7 @@ const placesRouter = express.Router();
 placesRouter.use(authenticateUser);
 
 placesRouter.get("/", getAllPlaces);
-placesRouter.get("/", getPlaceById);
+placesRouter.get("/:id", getPlaceById);
 placesRouter.get("/user/:id", getPlaceByUser);
 
 placesRouter.post("/", addPlace);
