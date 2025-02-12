@@ -1,7 +1,8 @@
 import { query } from "../db/db.js";
 
 const addBooking = async (req, res) => {
-  const { place_id, start_time, end_time } = req.body;
+  const { place_id } = req.params;
+  const { start_time, end_time } = req.body;
   const user_id = req.user.id;
 
   if (!start_time || !end_time) {
