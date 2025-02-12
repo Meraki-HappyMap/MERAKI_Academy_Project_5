@@ -17,8 +17,8 @@ bookingRouter.use(authenticateUser);
 bookingRouter.get("/user", getUserBookings);
 bookingRouter.get("/place/:place_id", getPlaceBookings);
 
-bookingRouter.post("/add", addBooking);
-bookingRouter.post("/check-availability", checkAvailability);
+bookingRouter.post("/add/:place_id", addBooking);
+bookingRouter.post("/check-availability/:place_id", checkAvailability);
 
 bookingRouter.put("/cancel/:booking_id", cancelBooking);
 bookingRouter.put("/update/:booking_id", updateBooking);
