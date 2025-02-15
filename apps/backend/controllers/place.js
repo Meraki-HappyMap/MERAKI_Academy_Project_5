@@ -139,6 +139,7 @@ const getPlaceById = async (req, res) => {
       places.location,
       users.username AS owner_username,
       users.email AS owner_email,
+      users.phone_number,
       COALESCE(json_agg(DISTINCT place_images.url) FILTER (WHERE place_images.id IS NOT NULL), '[]') AS images,
       COALESCE(json_agg(DISTINCT place_videos.url) FILTER (WHERE place_videos.id IS NOT NULL), '[]') AS videos
     FROM places
@@ -146,7 +147,7 @@ const getPlaceById = async (req, res) => {
     LEFT JOIN place_images ON place_images.place_id = places.id
     LEFT JOIN place_videos ON place_videos.place_id = places.id
     WHERE places.id = $1 AND places.is_deleted = 0
-    GROUP BY places.id, users.username, users.email;
+    GROUP BY places.id, users.username, users.email, phone_number;
   `;
 
   try {

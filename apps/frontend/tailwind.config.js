@@ -1,14 +1,11 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+import animate from "tailwindcss-animate";
+export default {
   darkMode: ["class"],
-  content: [
-    "./pages/**/*.{js,jsx}",
-    "./components/**/*.{js,jsx}",
-    "./app/**/*.{js,jsx}",
-    "./src/**/*.{ts,tsx,js,jsx}",
-  ],
+  content: ["./src/**/*.{ts,tsx,js,jsx}"],
   prefix: "",
   theme: {
+
     container: {
       center: true,
       padding: "2rem",
@@ -66,7 +63,7 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "spotlight": {
+        spotlight: {
           "0%": {
             opacity: 0,
             transform: "translate(-72%, -62%) scale(0.5)",
@@ -80,10 +77,11 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "spotlight": "spotlight 2s ease .75s 1 forwards",
+        spotlight: "spotlight 2s ease .75s 1 forwards",
       },
     },
   },
 
-  plugins: [require("tailwindcss-animate")],
+  plugins: [animate],
 };
+
