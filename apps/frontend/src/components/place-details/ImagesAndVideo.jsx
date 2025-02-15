@@ -1,4 +1,12 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 function ImagesAndVideo() {
   const place = {
@@ -19,7 +27,6 @@ function ImagesAndVideo() {
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-rwvUVbhAWYQRhilHwGGdjjTHyQJ_ZR3wzg&s",
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-rwvUVbhAWYQRhilHwGGdjjTHyQJ_ZR3wzg&s",
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-rwvUVbhAWYQRhilHwGGdjjTHyQJ_ZR3wzg&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-rwvUVbhAWYQRhilHwGGdjjTHyQJ_ZR3wzg&s",
       ],
       videos: ["https://www.w3schools.com/html/mov_bbb.mp4"],
     },
@@ -30,61 +37,47 @@ function ImagesAndVideo() {
 
   return (
     <div className="max-w-5xl mx-auto p-4">
-      <div className="grid grid-cols-5 gap-2 relative">
-        <div className="col-span-3">
-          <img
-            src={images[0]}
-            alt="Main"
-            className="w-full h-80 object-cover rounded-lg"
-          />
-        </div>
-
-        <div className="col-span-2 grid grid-cols-2 gap-2 relative">
-          {images.slice(1, 4).map((src, index) => (
-            <img
+      <Carousel opts={{ align: "start" }} className="w-full">
+        <CarouselContent>
+          {media.map((src, index) => (
+            <CarouselItem
               key={index}
-              src={src}
-              alt={`Thumbnail ${index}`}
-              className="w-full h-40 object-cover rounded-lg"
-            />
+              className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+            >
+              <Card>
+                <CardContent className="flex aspect-square items-center justify-center p-2">
+                  {src.endsWith(".mp4") ? (
+                    <video src={src} controls className="w-full h-full rounded-lg" />
+                  ) : (
+                    <img src={src} alt={`Media ${index}`} className="w-full h-full object-cover rounded-lg" />
+                  )}
+                </CardContent>
+              </Card>
+            </CarouselItem>
           ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
 
-          {videos.length > 0 && (
-            <video
-              src={videos[0]}
-              controls
-              className="w-full h-40 rounded-lg"
-            />
-          )}
-
-          <Dialog>
-            <DialogTrigger className="absolute bottom-0 right-0 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium">
-              Show all photos
-            </DialogTrigger>
-            <DialogContent className="w-full max-w-5xl">
-              <div className="grid grid-cols-3 gap-2">
-                {media.map((src, index) => (
-                  <div key={index} className="relative">
-                    {src.endsWith(".mp4") ? (
-                      <video
-                        src={src}
-                        controls
-                        className="w-full h-40 rounded-lg"
-                      />
-                    ) : (
-                      <img
-                        src={src}
-                        alt={`Media ${index}`}
-                        className="w-full h-40 object-cover rounded-lg"
-                      />
-                    )}
-                  </div>
-                ))}
+      <Dialog>
+        <DialogTrigger className="mt-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium">
+          Show all photos
+        </DialogTrigger>
+        <DialogContent className="w-full max-w-5xl">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+            {media.map((src, index) => (
+              <div key={index} className="relative">
+                {src.endsWith(".mp4") ? (
+                  <video src={src} controls className="w-full h-40 rounded-lg" />
+                ) : (
+                  <img src={src} alt={`Media ${index}`} className="w-full h-40 object-cover rounded-lg" />
+                )}
               </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
