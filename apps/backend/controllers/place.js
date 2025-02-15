@@ -127,8 +127,8 @@ const getPlaceByUser = async (req, res) => {
 };
 
 const getPlaceById = async (req, res) => {
-  const id = req.params.id;
-// TODO: refactor images and videos
+  const { placeId } = req.params;
+  // TODO: refactor images and videos
   const queryText = `
     SELECT 
       places.id,
@@ -151,18 +151,18 @@ const getPlaceById = async (req, res) => {
   `;
 
   try {
-    const result = await query(queryText, [id]);
+    const result = await query(queryText, [placeId]);
 
     if (result.rows.length !== 0) {
       res.status(200).json({
         success: true,
-        message: `The place with id: ${id}`,
+        message: `The place with id: ${placeId}`,
         data: result.rows[0],
       });
     } else {
       res.status(404).json({
         success: false,
-        message: `No place found with id: ${id}`,
+        message: `No place found with id: ${placeId}`,
       });
     }
   } catch (err) {
@@ -176,7 +176,7 @@ const getPlaceById = async (req, res) => {
 
 const updatePlaceById = async (req, res) => {
   const user_id = req.user.id;
-  const placeId = req.params.id;
+  const { placeId } = req.params;
   const { name, description, category_id, location, images, videos } = req.body;
 
   try {

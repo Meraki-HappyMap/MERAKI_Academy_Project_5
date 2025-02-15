@@ -160,12 +160,12 @@ const deleteCategoryById = async (req, res) => {
     if (result.rows.length !== 0) {
       res.status(200).json({
         success: true,
-        message: "Category deleted successfully",
+        message: "Category not found",
       });
     } else {
       res.status(404).json({
         success: true,
-        message: "Category not found",
+        message: "Category deleted successfully",
       });
     }
   } catch (err) {

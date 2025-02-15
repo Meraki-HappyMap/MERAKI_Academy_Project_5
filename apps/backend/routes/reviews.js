@@ -14,7 +14,7 @@ reviewsRouter.use(authenticateUser);
 
 reviewsRouter.get("/:place_id", getReviewsByPlace);
 
-reviewsRouter.post("/", addReview);
+reviewsRouter.post("/:place_id", addReview);
 
 reviewsRouter.put("/:id", updateReview);
 

@@ -204,7 +204,8 @@ const getPlaceBookings = async (req, res) => {
 };
 
 const checkAvailability = async (req, res) => {
-  const { place_id, start_time, end_time } = req.body;
+  const { place_id } = req.params;
+  const { start_time, end_time } = req.body;
 
   if (!start_time || !end_time) {
     return res.status(400).json({

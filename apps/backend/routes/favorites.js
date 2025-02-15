@@ -13,7 +13,7 @@ favoriteRouter.use(authenticateUser);
 
 favoriteRouter.post("/toggleFavorite/:place_id", toggleFavorite);
 favoriteRouter.get("/user", getUserFavorites);
-favoriteRouter.get("/check/:user_id/:palce_id", isPlaceFavorite);
+favoriteRouter.get("/check/:place_id", isPlaceFavorite);
 
 
 export default favoriteRouter;
