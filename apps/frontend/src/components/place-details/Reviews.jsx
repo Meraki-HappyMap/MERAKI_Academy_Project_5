@@ -3,44 +3,11 @@ import { Star } from "lucide-react";
 
 const reviews = {
   success: true,
-  message: "Reviews fetched successfully.",
   data: [
-    {
-      id: 1,
-      comment: "Fantastic accommodation. Just what we were looking for...",
-      rate: 5,
-      created_at: "1 week ago",
-      user_id: 1,
-      username: "Donna",
-      avatar_url: "https://via.placeholder.com/50",
-    },
-    {
-      id: 2,
-      comment: "Such a lovely villa and great location...",
-      rate: 5,
-      created_at: "January 2025",
-      user_id: 2,
-      username: "Hope",
-      avatar_url: "https://via.placeholder.com/50",
-    },
-    {
-      id: 3,
-      comment: "Awesome clean bright property...",
-      rate: 5,
-      created_at: "November 2024",
-      user_id: 3,
-      username: "Sarah",
-      avatar_url: "https://via.placeholder.com/50",
-    },
-    {
-      id: 4,
-      comment: "We had a great stay at Panagiotis’s place...",
-      rate: 4,
-      created_at: "November 2024",
-      user_id: 4,
-      username: "Maciej",
-      avatar_url: "https://via.placeholder.com/50",
-    },
+    { id: 1, comment: "Great!", rate: 3, username: "Donna", avatar_url: "https://via.placeholder.com/50" },
+    { id: 2, comment: "Nice stay", rate: 5, username: "Hope", avatar_url: "https://via.placeholder.com/50" },
+    { id: 1, comment: "Great!", rate: 3, username: "Donna", avatar_url: "https://via.placeholder.com/50" },
+    { id: 2, comment: "Nice stay", rate: 5, username: "Hope", avatar_url: "https://via.placeholder.com/50" },
   ],
 };
 
@@ -50,29 +17,23 @@ function Reviews() {
       <h2 className="text-2xl font-semibold mb-4">Guest Reviews</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {reviews.data.map((review) => (
-          <Card key={review.id} className="shadow-lg">
+          <Card key={review.id} className="shadow-lg bg-white dark:bg-gray-800">
             <CardHeader>
               <div className="flex items-center mb-2">
-                <img
-                  src={review.avatar_url}
-                  alt={review.username}
-                  className="w-10 h-10 rounded-full mr-3"
-                />
-                <div>
-                  <h3 className="font-semibold">{review.username}</h3>
-                </div>
+                <img src={review.avatar_url} alt={review.username} className="w-10 h-10 rounded-full mr-3" />
+                <h3 className="font-semibold dark:text-white">{review.username}</h3>
               </div>
             </CardHeader>
             <CardContent>
               <div className="flex items-center text-yellow-500 mb-2">
-                {Array.from({ length: review.rate }).map((_, index) => (
-                  <Star key={index} className="w-5 h-5" />
+                {[...Array(5)].map((_, index) => (
+                  <Star key={index} className={`w-5 h-5 ${index < review.rate ? "fill-current" : "text-gray-400"}`} />
                 ))}
               </div>
-              <p className="text-gray-700">{review.comment}</p>
+              <p className="text-gray-700 dark:text-gray-300">{review.comment}</p>
             </CardContent>
             <CardFooter>
-              <p className="text-gray-400 text-sm mt-2">{review.created_at}</p>
+              <p className="text-gray-400 text-sm mt-2">1 week ago</p>
             </CardFooter>
           </Card>
         ))}

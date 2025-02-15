@@ -12,21 +12,9 @@ const BookingWidget = () => {
   useEffect(() => {
     const place = {
       success: true,
-      message: "The place with id: 2",
       data: {
         id: 2,
         name: "game center",
-        description: "anything",
-        user_id: 1,
-        category_id: 1,
-        location: "test",
-        owner_username: "sami.mal",
-        owner_email: "sami.mal@outlook.com",
-        phone_number: null,
-        images: [
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-rwvUVbhAWYQRhilHwGGdjjTHyQJ_ZR3wzg&s",
-        ],
-        videos: ["https://www.w3schools.com/html/mov_bbb.mp4"],
       },
     };
 
@@ -36,32 +24,30 @@ const BookingWidget = () => {
   }, [placeId]);
 
   return (
-    <Card className="sticky top-20 w-full max-w-sm bg-white shadow-lg rounded-lg p-4">
+    <Card className="w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold text-gray-800">
+        <CardTitle className="text-xl font-semibold text-gray-800 dark:text-white">
           Book this place
         </CardTitle>
-        <CardContent>
-          <div className="mb-4">
-            <Label className="text-gray-600 text-sm">Place Name</Label>
-            <Input type="text" value={placeName} disabled className="mt-1" />
-          </div>
-
-          <div className="mb-4">
-            <Label className="text-gray-600 text-sm">Start Time</Label>
-            <Input type="datetime-local" className="mt-1" />
-          </div>
-
-          <div className="mb-4">
-            <Label className="text-gray-600 text-sm">End Time</Label>
-            <Input type="datetime-local" className="mt-1" />
-          </div>
-
-          <Button className="w-full mt-4" disabled>
-            Book Now
-          </Button>
-        </CardContent>
       </CardHeader>
+      <CardContent>
+        <div className="mb-4">
+          <Label className="text-gray-600 dark:text-gray-300 text-sm">Place Name</Label>
+          <Input type="text" value={placeName} disabled className="mt-1 bg-gray-200 dark:bg-gray-700" />
+        </div>
+
+        <div className="mb-4">
+          <Label className="text-gray-600 dark:text-gray-300 text-sm">Start Time</Label>
+          <Input type="datetime-local" className="mt-1 bg-gray-200 dark:bg-gray-700" />
+        </div>
+
+        <div className="mb-4">
+          <Label className="text-gray-600 dark:text-gray-300 text-sm">End Time</Label>
+          <Input type="datetime-local" className="mt-1 bg-gray-200 dark:bg-gray-700" />
+        </div>
+
+        <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white">Book Now</Button>
+      </CardContent>
     </Card>
   );
 };
