@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { PlaceCard } from "./PlaceCard";
 import { Link } from "react-router";
 
