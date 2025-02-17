@@ -33,7 +33,7 @@ function BlockBooking() {
           />
         </div>
 
-        <Button className="w-full mt-4 bg-black hover:bg-slate-800 text-white">
+        <Button className="w-full mt-4 bg-black hover:bg-slate-700 text-white">
           Block Now
         </Button>
       </CardContent>
