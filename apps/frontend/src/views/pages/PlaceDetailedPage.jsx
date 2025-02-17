@@ -1,26 +1,18 @@
-// import { useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 import { motion } from "motion/react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {
-  AlertCircle,
-  MapPin,
-  Star,
-  Clock,
-  Phone,
-  Mail,
-  Share2,
-} from "lucide-react";
+import { Star, Clock, Phone, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Card } from "@/components/ui/card";
+import { LoadingSkeleton } from "@/components/place-details/LoadingSkeleton";
+import { useToast } from "@/hooks/use-toast";
+
 import Features from "@/components/place-details/Features";
 import BookingWidget from "@/components/place-details/BookingSystem";
 import ImagesAndVideo from "@/components/place-details/ImagesAndVideo";
 import Reviews from "@/components/place-details/Reviews";
 import LocationMap from "@/components/place-details/LocationMap";
 import placesApi from "@/services/places";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import HeroSection from "@/components/place-details/HeroSection";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -38,8 +30,9 @@ const stagger = {
 };
 
 const PlaceDetailedPage = () => {
-  // const { id } = useParams();
-  const id = 7;
+  const { id } = useParams();
+  const { toast } = useToast();
+  const [isCopied, setIsCopied] = useState(false);
 
   const {
     data: place,
@@ -60,45 +53,35 @@ const PlaceDetailedPage = () => {
     }
   }, [id, refetch]);
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setIsCopied(true);
+      toast({
+        title: "Link Copied!",
+        description: "The URL has been copied to your clipboard.",
+        duration: 2000,
+      });
+
+      // Reset the copied state after 2 seconds
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to copy link:", error);
+    }
+  };
+
   if (isLoading) {
-    return (
-      <div className="max-w-7xl mx-auto p-4 space-y-8">
-        <Skeleton className="h-16 w-2/3 rounded-lg" />
-        <Skeleton className="h-[500px] w-full rounded-xl" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="md:col-span-2">
-            <Skeleton className="h-80 w-full rounded-xl" />
-          </div>
-          <Skeleton className="h-80 w-full rounded-xl" />
-        </div>
-      </div>
-    );
+    return <LoadingSkeleton />;
   }
 
-  if (error || !id) {
-    return (
-      <Alert variant="destructive" className="max-w-7xl mx-auto m-4">
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription>
-          {error?.message ||
-            "Failed to load place details. Please try again later."}
-        </AlertDescription>
-      </Alert>
-    );
+  if (error) {
+    return <Navigate to="/oops" />;
   }
 
-  if (!place) {
-    return (
-      <Alert variant="destructive" className="max-w-7xl mx-auto m-4">
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Place Not Found</AlertTitle>
-        <AlertDescription>
-          The place you&apos;re looking for doesn&apos;t exist or has been
-          removed.
-        </AlertDescription>
-      </Alert>
-    );
+  if (!place || !id) {
+    return <Navigate to="/404" />;
   }
 
   return (
@@ -109,37 +92,12 @@ const PlaceDetailedPage = () => {
       variants={stagger}
       className="max-w-7xl mx-auto p-6 dark:bg-gray-900 dark:text-white space-y-8"
     >
-      {/* Header Section */}
-      <motion.div variants={fadeIn} className="space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="text-sm">
-                {place.category_name || "Entertainment"}
-              </Badge>
-              <Badge variant="outline" className="text-sm">
-                ID: #{place.id}
-              </Badge>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white">
-              {place.name}
-            </h1>
-            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-              <MapPin className="h-4 w-4" />
-              <p>{place.location}</p>
-            </div>
-          </div>
-          <div className="flex gap-2 mt-4 md:mt-0">
-            <Button variant="outline" size="sm" className="gap-2">
-              <Share2 className="h-4 w-4" />
-              Share
-            </Button>
-            <Button variant="default" size="sm">
-              Book Now
-            </Button>
-          </div>
-        </div>
-      </motion.div>
+      <HeroSection
+        place={place}
+        handleShare={handleShare}
+        isCopied={isCopied}
+        fadeIn={fadeIn}
+      />
 
       {/* Images Section */}
       <motion.div
