@@ -1,11 +1,6 @@
 import React, { useState } from "react";
-import UserInfo from "./UserInfo"; // استخدام نفس المكون لعرض البيانات
+import UserInfo from "./UserInfo";
 import { Button } from "@/components/ui/button";
-
-const userData = {
-  avatarUrl: "https://via.placeholder.com/100",
-  username: "Saleh Alrawajfa",
-};
 
 function ConfirmedBooking() {
   const [visibleBookings, setVisibleBookings] = useState(3);
@@ -80,7 +75,7 @@ function ConfirmedBooking() {
         <div className="mt-3 flex justify-center">
           <Button
             onClick={() => setVisibleBookings(bookingData.length)}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm"
+            className="bg-black hover:bg-slate-700 text-white px-3 py-1 rounded-md text-sm"
           >
             Show More
           </Button>

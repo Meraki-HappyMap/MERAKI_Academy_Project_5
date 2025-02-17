@@ -50,7 +50,7 @@ function AllBooking() {
       </div>
       {visibleBookings < bookingData.length && (
         <div className="mt-3 flex justify-center">
-          <Button onClick={() => setVisibleBookings(bookingData.length)} className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm">
+          <Button onClick={() => setVisibleBookings(bookingData.length)} className="bg-black hover:bg-slate-700 text-white px-3 py-1 rounded-md text-sm">
             Show More
           </Button>
         </div>
