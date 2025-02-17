@@ -414,8 +414,6 @@ const getPlacesByCategory = async (req, res) => {
       });
     }
 
-    console.log("Found places:", result.rows.length);
-
     res.status(200).json({
       success: true,
       message: `Places found for category ID: ${categoryId}`,
