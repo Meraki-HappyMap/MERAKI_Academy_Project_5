@@ -7,6 +7,7 @@ import {
   updatePlaceById,
   deletePlaceById,
   deletePlaceByUser,
+  getPlacesByCategory,
 } from "../controllers/place.js";
 
 import { authenticateUser } from "../middleware/authN.js";
@@ -17,6 +18,7 @@ placesRouter.use(authenticateUser);
 
 placesRouter.get("/", getAllPlaces);
 placesRouter.get("/user", getPlaceByUser);
+placesRouter.get("/category/:categoryId", getPlacesByCategory);
 placesRouter.get("/:placeId", getPlaceById);
 
 placesRouter.post("/", addPlace);
