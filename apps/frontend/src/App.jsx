@@ -13,7 +13,8 @@ import {
   OopsPage,
   PlaceDetailedPage,
   ManageBookingPage,
-  OwnerProfilePage
+  OwnerProfilePage,
+  CategoryPage,
 } from "./views/pages";
 
 import RootLayout from "./views/layouts/RootLayout";
@@ -69,10 +70,10 @@ function App() {
           <Route path="explore" element={<ExplorePage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="place/:id" element={<PlaceDetailedPage />} />
-          <Route path="category/fitness" element={<ManageBookingPage />} />
+          <Route path="category/:categorySlug" element={<CategoryPage />} />
+          {/* <Route path="category/fitness" element={<ManageBookingPage />} />
           <Route path="category/Art" element={<OwnerProfilePage />} />
-          <Route path="category/cafes" element={<Navigate to="/owners" />} />
-          
+          <Route path="category/cafes" element={<Navigate to="/owners" />} /> */}
         </Route>
 
         {/* Owners routes */}
