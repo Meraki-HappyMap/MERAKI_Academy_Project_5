@@ -14,7 +14,8 @@ import {
   PlaceDetailedPage,
   ManageBookingPage,
   OwnerProfilePage,
-  ManageBookingForUser
+  CategoryPage,
+  ManageBookingForUser,
 } from "./views/pages";
 
 import RootLayout from "./views/layouts/RootLayout";
@@ -74,7 +75,7 @@ function App() {
           <Route path="category/Art" element={<OwnerProfilePage />} />
           <Route path="category/sports" element={<ManageBookingForUser />} />
           <Route path="category/cafes" element={<Navigate to="/owners" />} />
-          
+          <Route path="category/:categorySlug" element={<CategoryPage />} />
         </Route>
 
         {/* Owners routes */}

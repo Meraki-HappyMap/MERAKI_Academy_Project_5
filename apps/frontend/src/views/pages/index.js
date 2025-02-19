@@ -9,4 +9,5 @@ export { default as OopsPage } from "./OopsPage";
 export { default as PlaceDetailedPage } from "./PlaceDetailedPage";
 export { default as ManageBookingPage } from "./ManageBookingPage";
 export { default as OwnerProfilePage } from "./ownerProfilePage";
+export { default as CategoryPage } from "./CategoryPage";
 export { default as ManageBookingForUser } from "./ManageBookingForUser";

@@ -9,6 +9,7 @@ const keys = {
   details: () => [...keys.all, "detail"],
   detail: (id) => [...keys.details(), id],
   user: (userId) => [...keys.all, "user", userId],
+  category: (categoryId) => [...keys.all, "category", categoryId],
 };
 
 const placesApi = {
@@ -18,6 +19,9 @@ const placesApi = {
   getById: (id) => createApiRequest({ path: `/places/${id}` }),
 
   getByUser: (userId) => createApiRequest({ path: `/places/user/${userId}` }),
+
+  getByCategory: (categoryId) =>
+    createApiRequest({ path: `/places/category/${categoryId}` }),
 
   create: (data) =>
     createApiRequest({
@@ -60,6 +64,16 @@ const placesApi = {
       queryKey: keys.user(userId),
       queryFn: () => placesApi.getByUser(userId),
       enabled: !!userId,
+      ...options,
+    }),
+
+  useCategoryPlaces: (categoryId, options = {}) =>
+    useQuery({
+      queryKey: keys.category(categoryId),
+      queryFn: () => placesApi.getByCategory(categoryId),
+      enabled: !!categoryId,
+      refetchOnMount: true,
+      refetchOnWindowFocus: false,
       ...options,
     }),
 
