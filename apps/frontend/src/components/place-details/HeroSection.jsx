@@ -1,9 +1,16 @@
 import { motion } from "motion/react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Share2, Check } from "lucide-react";
+import { MapPin, Share2, Check, Calendar } from "lucide-react";
 
 const HeroSection = ({ place, handleShare, isCopied, fadeIn }) => {
+  const scrollToBooking = () => {
+    document.getElementById("booking-section").scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  };
+
   return (
     <motion.div variants={fadeIn} className="space-y-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between">
@@ -11,9 +18,6 @@ const HeroSection = ({ place, handleShare, isCopied, fadeIn }) => {
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="text-sm">
               {place.category_name || "Entertainment"}
-            </Badge>
-            <Badge variant="outline" className="text-sm">
-              ID: #{place.id}
             </Badge>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white">
@@ -43,7 +47,13 @@ const HeroSection = ({ place, handleShare, isCopied, fadeIn }) => {
               </>
             )}
           </Button>
-          <Button variant="default" size="sm">
+          <Button
+            variant="default"
+            size="sm"
+            onClick={scrollToBooking}
+            className="gap-2"
+          >
+            <Calendar className="h-4 w-4" />
             Book Now
           </Button>
         </div>
