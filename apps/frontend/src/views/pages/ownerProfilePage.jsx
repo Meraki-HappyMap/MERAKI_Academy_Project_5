@@ -1,151 +1,163 @@
-import React, { useState, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import React, { useState } from 'react';
 
-const sampleOwner = {
-  name: "Ahmad Wafa",
+// Sample host data
+const host = {
+  name: "Ahmad 🏞️",
   bio: "",
-  location: "New York, USA",
-  email: "ahmadwafa020@gmail.com",
-  socialLink: "https://instagram.com/ahmadwafa",
-  profileImage: "https://via.placeholder.com/150",
+  image: "https://via.placeholder.com/150",
+  isSuperhost: true,
 };
 
-const samplePlaces = [
+// Sample listings data
+const listings = [
   {
     id: 1,
-    name: "Cozy Apartment in NYC",
-    location: "Manhattan, New York",
-    image: "https://via.placeholder.com/400",
+    title: "Cozy Mountain Cabin 🏡",
+    rating: 4.86,
+    reviews: 741,
+    image: "https://via.placeholder.com/400x300",
+    description: "A cozy cabin nestled in the mountains of Colorado. Perfect for a winter getaway ❄️. Snow-capped peaks, warm fires, and peaceful surroundings await you!",
   },
   {
     id: 2,
-    name: "Beach House Retreat",
-    location: "Malibu, California",
-    image: "https://via.placeholder.com/400",
+    title: "Riverside Retreat 🌊",
+    rating: 4.81,
+    reviews: 651,
+    image: "https://via.placeholder.com/400x300",
+    description: "A peaceful retreat by the Mississippi River. Ideal for summer vacations 🌞. Enjoy water activities and evening bonfires under the stars.",
   },
 ];
 
-const OwnerProfilePage = ({ owner = sampleOwner, places = samplePlaces }) => {
-  const [editMode, setEditMode] = useState(false);
-  const [updatedProfile, setUpdatedProfile] = useState(owner);
+const OwnerProfilePage = () => {
+  const [bioExpanded, setBioExpanded] = useState(false);
+  const [listingExpanded, setListingExpanded] = useState(null);
 
-  const handleProfileUpdate = useCallback(() => {
-    console.log("Profile updated:", updatedProfile);
-    setEditMode(false);
-  }, [updatedProfile]);
-
-  const handleBookPlace = (place) => {
-    console.log(`Booking requested for: ${place.name}`);
-  };
+  const handleBioToggle = () => setBioExpanded(!bioExpanded);
+  const handleListingToggle = (id) => setListingExpanded(listingExpanded === id ? null : id);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
-      {/* Profile Header */}
-      <div className="flex items-center space-x-6">
-        <img
-          src={owner.profileImage || "https://via.placeholder.com/150"}
-          alt="Owner"
-          className="w-24 h-24 rounded-full object-cover border-4 border-gray-300"
-        />
+    <div className="bg-gray-100 min-h-screen">
+      {/* Sidebar */}
+      <div className="flex mt-20">
+        <aside className="bg-white shadow-lg w-64 p-6 space-y-6">
+          <div className="text-center">
+            <img
+              src={host.image}
+              alt="Host"
+              className="w-32 h-32 rounded-full mx-auto border-4 border-blue-500"
+            />
+            <h2 className="text-xl font-semibold mt-4">{host.name}</h2>
+            {host.isSuperhost && <p className="text-blue-500">Superhost ⭐</p>}
+          </div>
 
-        {/* Editable Profile Info */}
-        {editMode ? (
-          <div className="flex flex-col">
-            <Label>Name</Label>
-            <Input
-              value={updatedProfile.name}
-              onChange={(e) => setUpdatedProfile({ ...updatedProfile, name: e.target.value })}
-            />
-            <Label className="mt-2">Bio</Label>
-            <Input
-              value={updatedProfile.bio}
-              onChange={(e) => setUpdatedProfile({ ...updatedProfile, bio: e.target.value })}
-            />
-            <Label className="mt-2">Location</Label>
-            <Input
-              value={updatedProfile.location}
-              onChange={(e) => setUpdatedProfile({ ...updatedProfile, location: e.target.value })}
-            />
-            <div className="mt-2 flex space-x-2">
-              <Button onClick={handleProfileUpdate}>Save</Button>
-              <Button variant="outline" onClick={() => setEditMode(false)}>Cancel</Button>
+          <div className="space-y-4">
+            <h3 className="font-semibold">Social Media</h3>
+            <div className="flex justify-around">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800"
+                aria-label="Facebook"
+              >
+                <i className="fab fa-facebook-square text-2xl"></i>
+              </a>
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:text-blue-600"
+                aria-label="Twitter"
+              >
+                <i className="fab fa-twitter-square text-2xl"></i>
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-pink-500 hover:text-pink-700"
+                aria-label="Instagram"
+              >
+                <i className="fab fa-instagram text-2xl"></i>
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-700 hover:text-blue-900"
+                aria-label="LinkedIn"
+              >
+                <i className="fab fa-linkedin text-2xl"></i>
+              </a>
             </div>
           </div>
-        ) : (
-          <div>
-            <h1 className="text-2xl font-semibold">{owner.name}</h1>
-            <p className="text-gray-600">{owner.bio}</p>
-            <p className="text-sm text-gray-500">📍 {owner.location}</p>
-            <Button variant="outline" className="mt-2" onClick={() => setEditMode(true)}>
-              ✏️ Edit Profile
-            </Button>
-          </div>
-        )}
-      </div>
+        </aside>
 
-      {/* Contact & Socials */}
-      <div className="mt-4 flex space-x-4">
-        {owner.email && (
-          <Button asChild>
-            <a href={`mailto:${owner.email}`}>✉️ Contact</a>
-          </Button>
-        )}
-        {owner.socialLink && (
-          <Button variant="outline" asChild>
-            <a href={owner.socialLink} target="_blank" rel="noopener noreferrer">
-              🌍 View Social
-            </a>
-          </Button>
-        )}
-      </div>
-
-      {/* Hosted Places */}
-      <h2 className="mt-6 text-xl font-semibold">Hosted Places</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        {places.length > 0 ? (
-          places.map((place) => (
-            <div
-              key={place.id}
-              className="border rounded-lg overflow-hidden shadow-md bg-gray-50"
+        {/* Main Content */}
+        <main className="flex-1 p-8 space-y-12">
+          {/* About Section */}
+          <section id="about">
+            <h2 className="text-3xl font-semibold">About {host.name}</h2>
+            <p className="text-lg mt-4">
+              {bioExpanded ? host.bio : `${host.bio.substring(0, 200)}...`}
+            </p>
+            <button
+              onClick={handleBioToggle}
+              className="text-blue-500 hover:text-blue-700 mt-2"
             >
-              <img
-                src={place.image || "https://via.placeholder.com/400"}
-                alt={place.name}
-                className="w-full h-40 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-semibold">{place.name}</h3>
-                <p className="text-sm text-gray-600">{place.location}</p>
+              {bioExpanded ? "Show Less" : "Read More"}
+            </button>
+          </section>
 
-                {/* Booking Button */}
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button className="mt-2 w-full">Book Now</Button>
-                  </DialogTrigger>
-                  <DialogContent className="p-6">
-                    <h3 className="text-xl font-semibold">Book {place.name}</h3>
-                    <p>Enter your details to request a booking.</p>
-                    <Label className="mt-2">Your Name</Label>
-                    <Input placeholder="Your Name" className="mt-1" />
-                    <Label className="mt-2">Email</Label>
-                    <Input type="email" placeholder="Your Email" className="mt-1" />
-                    <Button
-                      className="mt-4 w-full"
-                      onClick={() => handleBookPlace(place)}
+          {/* Listings Section */}
+          <section id="listings">
+            <h2 className="text-3xl font-semibold">Your Listings 🏡</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
+              {listings.map((listing) => (
+                <div key={listing.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                  <img
+                    src={listing.image}
+                    alt={listing.title}
+                    className="w-full h-48 object-cover"
+                    aria-label={listing.title}
+                  />
+                  <div className="p-4">
+                    <h3 className="font-semibold text-lg">{listing.title}</h3>
+                    <p className="text-sm text-gray-600">
+                      {listing.rating} ⭐ ({listing.reviews} reviews)
+                    </p>
+                    <p className="mt-2 text-gray-700">
+                      {listingExpanded === listing.id
+                        ? listing.description
+                        : `${listing.description.substring(0, 100)}...`}
+                    </p>
+                    <button
+                      onClick={() => handleListingToggle(listing.id)}
+                      className="text-blue-500 hover:text-blue-700 mt-2"
                     >
-                      Confirm Booking
-                    </Button>
-                  </DialogContent>
-                </Dialog>
-              </div>
+                      {listingExpanded === listing.id ? "Show Less" : "Read More"}
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))
-        ) : (
-          <p className="text-gray-500">No places hosted yet.</p>
-        )}
+          </section>
+
+          {/* Contact Section */}
+          <section id="contact">
+            <h2 className="text-3xl font-semibold">Contact {host.name}</h2>
+            <p className="mt-4">
+              If you'd like to get in touch with me, feel free to email me directly at:
+            </p>
+            <a
+              href="mailto:ahmad@example.com"
+              className="text-blue-500 hover:text-blue-700 mt-2 inline-block"
+              aria-label="Email Ahmad"
+            >
+              ahmad@example.com
+            </a>
+          </section>
+        </main>
       </div>
     </div>
   );

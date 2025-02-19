@@ -12,14 +12,16 @@ import {
   NotFoundPage,
   OopsPage,
   PlaceDetailedPage,
-  ManageBookingPage,
   OwnerProfilePage,
+  UserProfilePage,
   CategoryPage,
+  ManageBookingPage,
   ManageBookingForUser,
 } from "./views/pages";
 
 import RootLayout from "./views/layouts/RootLayout";
 import OwnersLayout from "./views/layouts/OwnersLayout";
+// import PageTransition from "./components/PageTransition";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
@@ -55,6 +57,7 @@ function App() {
         {/* Protected routes */}
 
         {/* Root layout */}
+        {/* <Route element={<PageTransition />}> */}
         <Route element={<RootLayout />}>
           {
             <Route
@@ -75,6 +78,7 @@ function App() {
           <Route path="category/Art" element={<OwnerProfilePage />} />
           <Route path="category/sports" element={<ManageBookingForUser />} />
           <Route path="category/cafes" element={<Navigate to="/owners" />} />
+          <Route path="category/sports" element={<UserProfilePage />} />
           <Route path="category/:categorySlug" element={<CategoryPage />} />
         </Route>
 
