@@ -1,12 +1,17 @@
 // Map of URL slugs to category IDs
 export const CATEGORY_URL_MAP = {
-  fitness: 1,
-  art: 2,
-  cafes: 3,
-  entertainment: 4,
-  education: 5,
-  music: 6,
-  gaming: 8,
+  gaming: 9,
+  cafes: 10,
+  fitness: 11,
+  music: 12,
+  art: 13,
+  sports: 14,
+  restaurants: 15,
+  parks:16,
+  shopping:17,
+  events:18,
+  cycling:19,
+  camping:20,
 };
 
 export const getCategoryBySlug = (slug) => {
