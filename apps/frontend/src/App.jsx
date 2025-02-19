@@ -13,7 +13,10 @@ import {
   OopsPage,
   PlaceDetailedPage,
   OwnerProfilePage,
-  UserProfilePage
+  UserProfilePage,
+  CategoryPage,
+  ManageBookingPage,
+  ManageBookingForUser,
 } from "./views/pages";
 
 import RootLayout from "./views/layouts/RootLayout";
@@ -71,10 +74,12 @@ function App() {
           <Route path="explore" element={<ExplorePage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="place/:id" element={<PlaceDetailedPage />} />
-          <Route path="category/gaming" element={<PlaceDetailedPage />} />
+          <Route path="category/fitness" element={<ManageBookingPage />} />
           <Route path="category/Art" element={<OwnerProfilePage />} />
+          <Route path="category/sports" element={<ManageBookingForUser />} />
           <Route path="category/cafes" element={<Navigate to="/owners" />} />
-           <Route path="category/sports" element={< UserProfilePage />} />
+          <Route path="category/sports" element={<UserProfilePage />} />
+          <Route path="category/:categorySlug" element={<CategoryPage />} />
         </Route>
 
         {/* Owners routes */}
@@ -88,7 +93,6 @@ function App() {
         >
           <Route index element={<div>Owner Dashboard</div>} />
         </Route>
-        {/* </Route> */}
       </Routes>
     </ThemeProvider>
   );
