@@ -16,31 +16,31 @@ const bookingsApi = {
   getUserBookings: () => createApiRequest({ path: "/bookings/user" }),
 
   getPlaceBookings: (placeId) =>
-    createApiRequest({ path: `/places/${placeId}/bookings` }),
+    createApiRequest({ path: `/bookings/place/${placeId}` }),
 
   create: (placeId, data) =>
     createApiRequest({
-      path: `/places/${placeId}/bookings`,
+      path: `/bookings/add/${placeId}`,
       method: "POST",
       body: data,
     }),
 
   update: (bookingId, data) =>
     createApiRequest({
-      path: `/bookings/${bookingId}`,
+      path: `/bookings/update/${bookingId}`,
       method: "PUT",
       body: data,
     }),
 
   cancel: (bookingId) =>
     createApiRequest({
-      path: `/bookings/${bookingId}/cancel`,
-      method: "POST",
+      path: `/bookings/cancel/${bookingId}`,
+      method: "PUT",
     }),
 
   checkAvailability: (placeId, data) =>
     createApiRequest({
-      path: `/places/${placeId}/bookings/check`,
+      path: `/bookings/check-availability/${placeId}`,
       method: "POST",
       body: data,
     }),
