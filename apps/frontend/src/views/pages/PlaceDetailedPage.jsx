@@ -170,7 +170,7 @@ const PlaceDetailedPage = () => {
           </Card>
 
           <Card className="overflow-hidden">
-            <BookingWidget placeId={place.id} />
+            <BookingWidget place={place} />
           </Card>
 
           <Card className="p-6 space-y-4">

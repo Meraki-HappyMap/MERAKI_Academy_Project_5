@@ -351,6 +351,84 @@ const deletePlaceByUser = async (req, res) => {
   }
 };
 
+const getPlacesByCategory = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const numericCategoryId = parseInt(categoryId, 10);
+
+    if (isNaN(numericCategoryId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid category ID format",
+      });
+    }
+
+    const queryText = `
+      SELECT 
+        p.id,
+        p.name,
+        p.description,
+        p.location,
+        p.category_id,
+        p.created_at,
+        p.updated_at,
+        p.is_deleted,
+        json_build_object(
+          'id', users.id,
+          'username', users.username,
+          'email', users.email,
+          'avatar_url', users.avatar_url
+        ) as owner,
+        COALESCE(
+          (
+            SELECT json_agg(json_build_object('url', pi.url))
+            FROM place_images pi
+            WHERE pi.place_id = p.id
+          ),
+          '[]'
+        ) as images,
+        COALESCE(
+          (
+            SELECT json_agg(json_build_object('url', pv.url))
+            FROM place_videos pv
+            WHERE pv.place_id = p.id
+          ),
+          '[]'
+        ) as videos,
+        COALESCE(AVG(reviews.rate), 0) as average_rating,
+        COUNT(DISTINCT reviews.id) as review_count
+      FROM places p
+      INNER JOIN users ON users.id = p.user_id
+      LEFT JOIN reviews ON reviews.place_id = p.id AND reviews.is_deleted = 0
+      WHERE p.category_id = $1 AND p.is_deleted = 0
+      GROUP BY p.id, users.id, users.username, users.email, users.avatar_url
+      ORDER BY p.created_at DESC;
+    `;
+
+    const result = await query(queryText, [numericCategoryId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: `No places found for category ID: ${categoryId}`,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Places found for category ID: ${categoryId}`,
+      data: result.rows,
+    });
+  } catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error retrieving places by category",
+      error: error.message,
+    });
+  }
+};
+
 export {
   addPlace,
   getAllPlaces,
@@ -359,4 +437,5 @@ export {
   updatePlaceById,
   deletePlaceById,
   deletePlaceByUser,
+  getPlacesByCategory,
 };
