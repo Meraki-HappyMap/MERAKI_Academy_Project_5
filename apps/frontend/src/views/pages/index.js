@@ -12,3 +12,5 @@ export { default as UserProfilePage } from "./userProfilePage";
 export { default as CategoryPage } from "./CategoryPage";
 export { default as ManageBookingPage } from "./ManageBookingPage";
 export { default as ManageBookingForUser } from "./ManageBookingForUser";
+
+export { default as AddPlacePage } from "./AddPlacePage";
