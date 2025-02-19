@@ -1,6 +1,6 @@
 // Map of URL slugs to category IDs
 export const CATEGORY_URL_MAP = {
-  gaming: 9,
+  gaming: 8,
   cafes: 10,
   fitness: 11,
   music: 12,
