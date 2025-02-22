@@ -73,7 +73,7 @@ function App() {
           <Route path="manage-bookings" element={<ManageBookingForUser />} />
           <Route path="/places/:placeId" element={<ManageBookingPage />} />
 
-          <Route path="category/shopping" element={<Navigate to="/owners" />} />
+          <Route path="category/events" element={<Navigate to="/owners" />} />
           <Route path="category/Camping" element={<OwnerProfilePage />} />
           <Route path="category/cycling" element={<AddPlacePage />} />
 
