@@ -37,10 +37,6 @@ function App() {
           }
         />
 
-        {/* TODO: add a 404 page and 500 page with redirect button to home */}
-        <Route path="/oops" element={<OopsPage />} />
-        <Route path="/404" element={<NotFoundPage />} />
-
         <Route
           path="role-selection"
           element={
@@ -93,6 +89,12 @@ function App() {
         >
           <Route index element={<div>Owner Dashboard</div>} />
         </Route>
+
+        {/* Error pages */}
+        <Route path="oops" element={<OopsPage />} />
+        <Route path="404" element={<NotFoundPage />} />
+        <Route path="*" element={<Navigate to="404" replace />} />
+        
       </Routes>
     </ThemeProvider>
   );
