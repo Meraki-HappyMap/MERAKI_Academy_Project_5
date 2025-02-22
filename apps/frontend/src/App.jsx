@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import {
   HomePage,
   ExplorePage,
-  ProfilePage,
   SigninPage,
   RoleSelectionPage,
   NotFoundPage,
@@ -17,6 +16,7 @@ import {
   OwnerProfilePage,
   AddPlacePage,
   CategoryPage,
+  UserProfilePage,
 } from "./views/pages";
 
 import RootLayout from "./views/layouts/RootLayout";
@@ -68,7 +68,7 @@ function App() {
             />
           }
           <Route path="explore" element={<ExplorePage />} />
-          <Route path="profile" element={<ProfilePage />} />
+          <Route path="me" element={<UserProfilePage />} />
           <Route path="place/:id" element={<PlaceDetailedPage />} />
           <Route path="category/fitness" element={<ManageBookingPage />} />
           <Route path="category/Art" element={<OwnerProfilePage />} />
@@ -93,8 +93,7 @@ function App() {
         {/* Error pages */}
         <Route path="oops" element={<OopsPage />} />
         <Route path="404" element={<NotFoundPage />} />
-        <Route path="*" element={<Navigate to="404" replace />} />
-        
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </ThemeProvider>
   );

@@ -79,9 +79,9 @@ const Navbar = () => {
               <DropdownMenuContent align="end" className="w-48">
                 {isAuthenticated ? (
                   <>
-                    <Link to="/bookings">
+                    <Link to="/me">
                       <DropdownMenuItem className="cursor-pointer">
-                        My Bookings (todo)
+                        My Profile
                       </DropdownMenuItem>
                     </Link>
                     <DropdownMenuItem
