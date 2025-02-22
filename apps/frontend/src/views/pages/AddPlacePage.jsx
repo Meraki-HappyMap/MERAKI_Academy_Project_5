@@ -9,14 +9,137 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DollarSign } from "lucide-react";
+import { DollarSign, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { useToast } from "@/hooks/use-toast";
+import placesApi from "@/services/places";
+import { CATEGORY_URL_MAP } from "@/lib/constants/categories";
 
 function AddPlacePage() {
-  const allCategories = [
-    { id: 1, name: "PlayStation", is_deleted: 0 },
-    { id: 2, name: "Farm", is_deleted: 0 },
-    { id: 8, name: "Gaming", is_deleted: 0 },
-  ];
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    location: "",
+    category_id: "",
+    price: "",
+    images: [],
+    videos: [],
+  });
+
+  const allCategories = Object.entries(CATEGORY_URL_MAP).map(([name, id]) => ({
+    id,
+    name: name.charAt(0).toUpperCase() + name.slice(1),
+  }));
+
+  const createPlaceMutation = placesApi.useCreate({
+    onSuccess: (response) => {
+      console.log("Place creation response:", response);
+      toast({
+        title: "Success!",
+        description: "Place added successfully.",
+        variant: "success",
+      });
+      if (response?.data?.id) {
+        navigate(`/places/${response.data.id}`);
+      } else if (response?.id) {
+        navigate(`/places/${response.id}`);
+      } else {
+        navigate("/oops");
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to add place. Please try again.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+    },
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleCategoryChange = (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      category_id: Number(value),
+    }));
+  };
+
+  const handleFileChange = (e, type) => {
+    const files = Array.from(e.target.files);
+    setFormData((prev) => ({
+      ...prev,
+      [type]: [...prev[type], ...files],
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      !formData.name?.trim() ||
+      !formData.description?.trim() ||
+      !formData.location?.trim() ||
+      !formData.category_id
+    ) {
+      toast({
+        title: "Error",
+        description:
+          "All fields (name, description, category, location) are required.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const placeData = {
+        name: formData.name.trim(),
+        description: formData.description.trim(),
+        location: formData.location.trim(),
+        category_id: formData.category_id,
+        price: formData.price || 0,
+      };
+
+      await createPlaceMutation.mutateAsync(placeData);
+
+      if (formData.images.length > 0 || formData.videos.length > 0) {
+        const mediaFormData = new FormData();
+
+        formData.images.forEach((image) => {
+          mediaFormData.append("images", image);
+        });
+
+        formData.videos.forEach((video) => {
+          mediaFormData.append("videos", video);
+        });
+
+        // TODO: Add media upload endpoint call here
+        // await uploadMediaMutation.mutateAsync({ placeId: result.data.id, mediaFormData });
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to add place. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex items-start justify-center min-h-screen bg-gray-100 dark:bg-[#0B0F17] p-6">
@@ -27,13 +150,16 @@ function AddPlacePage() {
               Add New Place
             </CardTitle>
           </CardHeader>
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
                 Place Name
               </label>
               <Input
                 type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
                 placeholder="Enter place name"
                 className="transition-colors focus:border-rose-500 dark:focus:border-rose-400 dark:bg-[#1C2130] dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
                 required
@@ -45,6 +171,9 @@ function AddPlacePage() {
                 Description
               </label>
               <Textarea
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
                 placeholder="Enter place description"
                 className="min-h-[120px] transition-colors focus:border-rose-500 dark:focus:border-rose-400 dark:bg-[#1C2130] dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
                 required
@@ -57,6 +186,9 @@ function AddPlacePage() {
               </label>
               <Input
                 type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleInputChange}
                 placeholder="Enter location"
                 className="transition-colors focus:border-rose-500 dark:focus:border-rose-400 dark:bg-[#1C2130] dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
                 required
@@ -67,7 +199,13 @@ function AddPlacePage() {
               <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
                 Category
               </label>
-              <Select>
+              <Select
+                value={
+                  formData.category_id ? formData.category_id.toString() : ""
+                }
+                onValueChange={handleCategoryChange}
+                required
+              >
                 <SelectTrigger className="transition-colors focus:border-rose-500 dark:focus:border-rose-400 dark:bg-[#1C2130] dark:border-gray-700 dark:text-gray-100">
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
@@ -93,6 +231,9 @@ function AddPlacePage() {
                 <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
                 <Input
                   type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleInputChange}
                   min="0"
                   step="0.01"
                   placeholder="0.00"
@@ -107,9 +248,17 @@ function AddPlacePage() {
 
             <Button
               type="submit"
+              disabled={isLoading}
               className="w-full bg-rose-500 hover:bg-rose-600 dark:bg-rose-500 dark:hover:bg-rose-600 text-white dark:text-white"
             >
-              Add Place
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Adding Place...
+                </>
+              ) : (
+                "Add Place"
+              )}
             </Button>
           </form>
         </CardContent>
@@ -125,11 +274,14 @@ function AddPlacePage() {
                   type="file"
                   accept="image/*"
                   multiple
+                  onChange={(e) => handleFileChange(e, "images")}
                   className="absolute inset-0 opacity-0 cursor-pointer"
                 />
                 <div className="text-center">
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Drag and drop your images here, or click to select
+                    {formData.images.length > 0
+                      ? `${formData.images.length} images selected`
+                      : "Drag and drop your images here, or click to select"}
                   </p>
                 </div>
               </div>
@@ -143,11 +295,14 @@ function AddPlacePage() {
                   type="file"
                   accept="video/*"
                   multiple
+                  onChange={(e) => handleFileChange(e, "videos")}
                   className="absolute inset-0 opacity-0 cursor-pointer"
                 />
                 <div className="text-center">
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Drag and drop your videos here, or click to select
+                    {formData.videos.length > 0
+                      ? `${formData.videos.length} videos selected`
+                      : "Drag and drop your videos here, or click to select"}
                   </p>
                 </div>
               </div>

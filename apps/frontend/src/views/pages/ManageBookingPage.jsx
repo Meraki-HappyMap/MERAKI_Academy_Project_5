@@ -12,9 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const ManageBookingPage = () => {
   const [selectedTab, setSelectedTab] = useState("all");
-  // TODO: get placeId from params
-  // const { placeId } = useParams();
-  const placeId = 1;
+  const { placeId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -30,10 +28,13 @@ const ManageBookingPage = () => {
     }
   }, [placeId, navigate, toast]);
 
-  const { data: bookings, isLoading } = bookingsApi.usePlaceBookings(placeId, {
-    refetchInterval: 30000,
-    enabled: !!placeId,
-  });
+  const { data: bookings, isLoading } = bookingsApi.usePlaceBookings(
+    Number(placeId),
+    {
+      refetchInterval: 30000, // Refetch every 30 seconds
+      enabled: !!placeId,
+    }
+  );
 
   if (!placeId) return null;
 
@@ -110,14 +111,17 @@ const ManageBookingPage = () => {
                 <div className="mt-4">
                   <TabsContent value="all" className="mt-0">
                     <Card className="p-4 sm:p-6">
-                      <AllBooking placeId={placeId} bookings={bookings?.data} />
+                      <AllBooking
+                        placeId={Number(placeId)}
+                        bookings={bookings?.data}
+                      />
                     </Card>
                   </TabsContent>
 
                   <TabsContent value="confirmed" className="mt-0">
                     <Card className="p-4 sm:p-6">
                       <ConfirmedBooking
-                        placeId={placeId}
+                        placeId={Number(placeId)}
                         bookings={bookings?.data?.filter(
                           (b) => b.status === "confirmed"
                         )}
@@ -128,7 +132,7 @@ const ManageBookingPage = () => {
                   <TabsContent value="calendar" className="mt-0">
                     <Card className="p-4 sm:p-6">
                       <CalenderBooking
-                        placeId={placeId}
+                        placeId={Number(placeId)}
                         bookings={bookings?.data}
                       />
                     </Card>
@@ -137,7 +141,7 @@ const ManageBookingPage = () => {
                   <TabsContent value="block" className="mt-0">
                     <Card className="p-4 sm:p-6">
                       <BlockBooking
-                        placeId={placeId}
+                        placeId={Number(placeId)}
                         existingBookings={bookings?.data}
                       />
                     </Card>

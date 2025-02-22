@@ -71,14 +71,13 @@ function App() {
           <Route path="me" element={<UserProfilePage />} />
           <Route path="place/:id" element={<PlaceDetailedPage />} />
           <Route path="manage-bookings" element={<ManageBookingForUser />} />
+          <Route path="/places/:placeId" element={<ManageBookingPage />} />
 
-          <Route path="category/events" element={<ManageBookingPage />} />
           <Route path="category/shopping" element={<Navigate to="/owners" />} />
           <Route path="category/Camping" element={<OwnerProfilePage />} />
           <Route path="category/cycling" element={<AddPlacePage />} />
 
           <Route path="category/:categorySlug" element={<CategoryPage />} />
-
         </Route>
 
         {/* Owners routes */}
