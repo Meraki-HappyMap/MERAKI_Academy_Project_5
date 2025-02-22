@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { motion } from "motion/react";
+import { Link } from "react-router";
 import {
   Facebook,
   Twitter,
@@ -246,14 +247,12 @@ const UserProfilePage = () => {
                           {booking.status}
                         </span>
                       </div>
-                      <button
-                        onClick={() =>
-                          alert(`Managing booking for ${booking.listing}`)
-                        }
+                      <Link
+                        to="/manage-bookings"
                         className="bg-rose-500 dark:bg-rose-600 text-white px-4 py-2 rounded-lg hover:bg-rose-600 dark:hover:bg-rose-700 transition-colors duration-200"
                       >
                         Manage Booking
-                      </button>
+                      </Link>
                     </div>
 
                     <button
