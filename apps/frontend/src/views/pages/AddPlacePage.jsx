@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DollarSign } from "lucide-react";
 
 function AddPlacePage() {
   const allCategories = [
@@ -82,6 +83,26 @@ function AddPlacePage() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                Price (JOD)
+              </label>
+              <div className="relative">
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
+                <Input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00"
+                  className="pl-10 transition-colors focus:border-rose-500 dark:focus:border-rose-400 dark:bg-[#1C2130] dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
+                  required
+                />
+              </div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Enter the price per hour/day in Jordanian Dinar
+              </p>
             </div>
 
             <Button
